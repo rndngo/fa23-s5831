@@ -136,26 +136,33 @@ public class Model {
      */
     public static boolean atLeastOneMoveExists(Board b) {
         int s = b.size();
-        for (int r = 0; r < 4; r++) {
-            for (int c = 0; c < 3; c++) {
+        if (b.tile(0,0) == null) {
+            return true;
+        } else if (s <= 1 ) {
+            return false;
+        }
+        for (int r = 0; r < s; r++) {
+            for (int c = 0; c < s-1; c++) {
                 if (b.tile(r, c) == null) {
                     return true;
                 }
-                else if (b.tile(r, c).value() == b.tile(r, c + 1).value()) {
-                    return true;
+                else if (b.tile(r, c+ 1) != null) {
+                    if (b.tile(r, c).value() == b.tile(r, c + 1).value()) {
+                        return true;
+                    }
                 }
-
             }
 
-        }for (int r = 0; r < 4; r++) {
-            for (int c = 0; c < 3; c++) {
+        }for (int r = 0; r < s; r++) {
+            for (int c = 0; c < s-1; c++) {
                 if (b.tile(r, c) == null) {
                     return true;
                 }
-                else if (b.tile(c, r).value() == b.tile(c+1, r).value()) {
-                    return true;
+                else if (b.tile(r, c+ 1) != null) {
+                    if (b.tile(c, r).value() == b.tile(c + 1, r).value()) {
+                        return true;
+                    }
                 }
-
             }
 
         }
@@ -175,12 +182,52 @@ public class Model {
      *    and the trailing tile does not.
      * */
     public void tilt(Side side) {
+        board.setViewingPerspective(side);
+        int s = board.size();
+        for (int c = 0; c < s; c++) {
+            for (int i = 0; i < s - 1; i++) {
+                for (int r = s - 2; r >= 0; r--) {
+                    if (board.tile(c, r) != null) {
+                        if (board.tile(c, r + 1) == null) {
+                            Tile t = board.tile(c, r);
+                            board.move(c, r + 1, t);
+                        }}}}}
+            for (int c = 0; c < s; c++) {
+                    for (int r = s - 2; r >= 0; r--) {
+                        if (board.tile(c, r) != null && board.tile(c, r + 1) != null) {
+                            if (board.tile(c, r).value() == board.tile(c, r + 1).value()) {
+                                Tile t = board.tile(c, r);
+                                board.move(c, r + 1, t);
+                                this.score += board.tile(c, r + 1).value();
+                            }}}}
+        for (int c = 0; c < s; c++) {
+            for (int i = 0; i < s - 1; i++) {
+                for (int r = s - 2; r >= 0; r--) {
+                    if (board.tile(c, r) != null) {
+                        if (board.tile(c, r + 1) == null) {
+                            Tile t = board.tile(c, r);
+                            board.move(c, r + 1, t);
+                        }}}}}
+        board.setViewingPerspective(Side.NORTH);
+        checkGameOver();
+    }
+        /*  Variable set for Size
+*   Goes through each column
+*   Goes through each row: s-2 < 0 backwards
+*       Checks if column, row is empty
+*       If not, check if column, last row is empty
+*           If so, move column, row to column, last row
+*           If not, check if column, row is == column, last row
+*               If so, move column, row to column,last row
+*
+* */
+
+
         // TODO: Modify this.board (and if applicable, this.score) to account
         // for the tilt to the Side SIDE.
 
 
-        checkGameOver();
-    }
+
 
 
     @Override
