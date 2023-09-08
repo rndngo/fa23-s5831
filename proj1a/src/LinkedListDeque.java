@@ -1,4 +1,3 @@
-import java.awt.desktop.AppReopenedEvent;
 import java.util.List;
 import java.util.ArrayList; // import the ArrayList class
 
@@ -6,23 +5,24 @@ import java.util.ArrayList; // import the ArrayList class
 public class LinkedListDeque<T> implements Deque<T> {
 
     private class Node {
-        public Node prev;
-        public Node next;
-        public T item;
-        public Node(T item, Node prev, Node next){
+        private Node prev;
+        private Node next;
+        private final T item;
+
+        public Node(T item, Node prev, Node next) {
             this.prev = prev;
             this.next = next;
             this.item = item;
         }
     }
-    private Node sentinel;
+
+    private final Node sentinel;
     private int size;
 
     public LinkedListDeque() {
-        Node sentinel = new Node(null, null, null);
-        sentinel.next = sentinel;
-        sentinel.prev = sentinel;
-        this.sentinel = sentinel;
+        this.sentinel = new Node(null, null, null);
+        this.sentinel.next = sentinel;
+        this.sentinel.prev = sentinel;
         this.size = 0;
     }
 
@@ -44,16 +44,18 @@ public class LinkedListDeque<T> implements Deque<T> {
     public List<T> toList() {
         List<T> returnList = new ArrayList<>();
         Node S = sentinel.next;
-        for (int i = 0; i < this.size; i++){
+        for (int i = 0; i < this.size; i++) {
             returnList.add(S.item);
             S = S.next;
         }
-
         return returnList;
     }
 
     @Override
     public boolean isEmpty() {
+        if (this.size() == 0) {
+            return true;
+        }
         return this.sentinel.prev == null && this.sentinel.next == null;
 
     }
@@ -81,7 +83,7 @@ public class LinkedListDeque<T> implements Deque<T> {
     public T removeLast() {
         Node S1 = this.sentinel;
         Node S2 = S1.prev;
-        if (S1.prev.item != null){
+        if (S1.prev.item != null) {
             S1.prev = S1.prev.prev;
             S1.prev.next = S1;
             this.size -= 1;
@@ -106,19 +108,18 @@ public class LinkedListDeque<T> implements Deque<T> {
 
     @Override
     public T getRecursive(int index) {
-        Node S = this.sentinel;
-        if (index <= 0)
+        if (index <= 0) {
             return null;
-        else {
-            return Recurisve(index, S, this.size, 0);
+        } else {
+            return helper(index, this.sentinel, 0);
         }
     }
-    public T Recurisve(int i, Node S, int size, int counter){
-        if (counter == i){
+
+    public T helper(int i, Node S, int counter) {
+        if (counter == i) {
             return S.item;
-        }
-        else {
-            return Recurisve(i,S.next,size,counter+1);
+        } else {
+            return helper(i, S.next, counter + 1);
         }
     }
 }

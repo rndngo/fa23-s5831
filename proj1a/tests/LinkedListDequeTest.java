@@ -90,6 +90,8 @@ public class LinkedListDequeTest {
         Deque<Integer> lld1 = new LinkedListDeque<>();
         lld1.addLast(0);
         assertThat(lld1.isEmpty()).isFalse();
+        lld1.removeLast();
+        assertThat(lld1.isEmpty()).isTrue();
     }
 
     @Test
@@ -99,7 +101,9 @@ public class LinkedListDequeTest {
         lld1.addLast(0);
         lld1.addFirst(1);
         lld1.addFirst(2);
+        assertThat(lld1).isEqualTo(lld1);
         assertThat(lld1.get(2)).isEqualTo(1);
+
     }
 
     @Test
