@@ -69,7 +69,7 @@ public class LinkedListDeque<T> implements Deque<T> {
     public T removeFirst() {
         Node S1 = this.sentinel;
         Node S2 = S1.next;
-        if (S1.next.item != this.sentinel) {
+        if (S1.next.item != null) {
             S1.next = S1.next.next;
             S1.next.prev = S1;
             this.size -= 1;
@@ -83,7 +83,7 @@ public class LinkedListDeque<T> implements Deque<T> {
     public T removeLast() {
         Node S1 = this.sentinel;
         Node S2 = S1.prev;
-        if (S1.prev.item != this.sentinel) {
+        if (S1.prev.item != null) {
             S1.prev = S1.prev.prev;
             S1.prev.next = S1;
             this.size -= 1;
