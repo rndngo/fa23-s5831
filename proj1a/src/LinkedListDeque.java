@@ -97,7 +97,7 @@ public class LinkedListDeque<T> implements Deque<T> {
         Node S = this.sentinel;
         for (int i = 0; i < this.size; i++) {
             if (i == index) {
-                return S.next.item;
+                return S.item;
             }
             S = S.next;
         }
@@ -115,7 +115,7 @@ public class LinkedListDeque<T> implements Deque<T> {
 
     public T helper(int i, Node S, int counter) {
         if (counter == i) {
-            return S.next.item;
+            return S.item;
         } else {
             return helper(i, S.next, counter + 1);
         }
