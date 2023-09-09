@@ -95,17 +95,13 @@ public class LinkedListDeque<T> implements Deque<T> {
     @Override
     public T get(int index) {
         Node S = this.sentinel;
-        if (index <= 0){
-            return null;
-        }
-        else
-            for (int i = 0; i < this.size; i++) {
+        for (int i = 0; i < this.size; i++) {
             if (i == index) {
                 return S.item;
             }
             S = S.next;
         }
-        return S.item;
+        return this.sentinel.item;
     }
 
     @Override
