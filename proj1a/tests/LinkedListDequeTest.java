@@ -107,7 +107,7 @@ public class LinkedListDequeTest {
         lld1.addFirst(1);
         lld1.addFirst(2);
         assertThat(lld1).isEqualTo(lld1);
-        assertThat(lld1.get(2)).isEqualTo(1);
+        assertThat(lld1.get(2)).isEqualTo(0);
 
     }
 
@@ -134,7 +134,7 @@ public class LinkedListDequeTest {
         lld1.addLast(0);
         lld1.addFirst(1);
         lld1.addFirst(2);
-        assertThat(lld1.getRecursive(2)).isEqualTo(1);
+        assertThat(lld1.getRecursive(2)).isEqualTo(0);
     }
 
     @Test
@@ -142,7 +142,7 @@ public class LinkedListDequeTest {
     public void testgetRecursiveround2(){
         Deque<Integer> lld1 = new LinkedListDeque<>();
         lld1.addFirst(500);
-        assertThat(lld1.getRecursive(0)).isEqualTo(null);
+        assertThat(lld1.getRecursive(0)).isEqualTo(500);
     }
 
     @Test

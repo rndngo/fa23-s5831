@@ -101,21 +101,21 @@ public class LinkedListDeque<T> implements Deque<T> {
         for (int i = 0; i < index; i++) {
             S = S.next;
         }
-        return this.sentinel.item;
+        return S.item;
     }
 
     @Override
     public T getRecursive(int index) {
-        return helper(index, this.sentinel);
+        return getRecursivehelper(index, this.sentinel.next);
     }
 
-    public T helper(int i, Node S) {
+    private T getRecursivehelper(int i, Node S) {
         if (i == 0) {
             return S.item;
         } else if (S.next == sentinel) {
             return null;
         } else {
-            return helper(i - 1, S.next);
+            return getRecursivehelper(i - 1, S.next);
         }
     }
 }
