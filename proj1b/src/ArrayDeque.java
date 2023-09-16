@@ -2,14 +2,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ArrayDeque<T> implements Deque<T> {
-    public T[] items;
-    public int size;
-    public int limit;
+    private T[] items;
+    private int size = 0;
+    private final int limit = 8;
+
 
     public ArrayDeque() {
-        size = 0;
-        limit = 8;
-        items = (T[]) new Object[limit];
+        this.size = 0;
+
+        this.items = (T[]) new Object[limit];
     }
 
 
@@ -18,7 +19,7 @@ public class ArrayDeque<T> implements Deque<T> {
         if (size == items.length) {
             resize(size + 1);
         }
-        items[size] = x;
+        items[0] = x;
         size += 1;
     }
 
@@ -32,8 +33,8 @@ public class ArrayDeque<T> implements Deque<T> {
     }
     private void resize(int l) {
         T[] items2 = (T[]) new Object[l];
-        for (int i = 0; i < items.length; i++){
-              items2[i] = items[i];
+        for (int i = 0; i < items.length; i++) {
+            items2[i] = items[i];
         }
         items = items2;
     }
@@ -41,7 +42,7 @@ public class ArrayDeque<T> implements Deque<T> {
     @Override
     public List<T> toList() {
         List<T> returnList = new ArrayList<>();
-        for (int i = 0; i < size; i++){
+        for (int i = 0; i < size; i++) {
             returnList.add(items[i]);
         }
         return returnList;
@@ -73,10 +74,10 @@ public class ArrayDeque<T> implements Deque<T> {
 
     @Override
     public T get(int index) {
-        if (index > size){
+        if (index > size) {
             return null;
         }
-        return items[index];
+        return items[(size + index) % items.length];
     }
 
     @Override
