@@ -4,12 +4,12 @@ import java.util.List;
 public class ArrayDeque<T> implements Deque<T> {
     private T[] items;
     private int size = 0;
-    private final int limit = 8;
-
+    private int last = 0;
+    private int start = 0;
 
     public ArrayDeque() {
         this.size = 0;
-
+        int limit = 8;
         this.items = (T[]) new Object[limit];
     }
 
@@ -19,8 +19,17 @@ public class ArrayDeque<T> implements Deque<T> {
         if (size == items.length) {
             resize(size + 1);
         }
-        items[0] = x;
+        items[start] = x;
+        setMoving(-1);
         size += 1;
+    }
+
+    private void setMoving(int moving){
+        start += moving;
+        start %= items.length;
+        if (start < 0){
+            start += items.length;
+        }
     }
 
     @Override
@@ -29,14 +38,19 @@ public class ArrayDeque<T> implements Deque<T> {
             resize(size + 1);
         }
         items[size] = x;
+        last += 1;
         size += 1;
     }
     private void resize(int l) {
         T[] items2 = (T[]) new Object[l];
-        for (int i = 0; i < items.length; i++) {
-            items2[i] = items[i];
+        for (int i = start; i < items.length ; i++) {
+            items2[i - start] = items[i];
+        }
+        for (int i = items.length - start; i < items.length; i++){
+            items2[i] = items[i - items.length + start];
         }
         items = items2;
+        start = 0;
     }
 
     @Override
@@ -50,7 +64,7 @@ public class ArrayDeque<T> implements Deque<T> {
 
     @Override
     public boolean isEmpty() {
-        return size == 0 || items.length == 0 || limit == 0;
+        return size == 0 || items.length == 0;
     }
 
     @Override
@@ -60,24 +74,28 @@ public class ArrayDeque<T> implements Deque<T> {
 
     @Override
     public T removeFirst() {
-        T x = get(0);
+        T x = get(start);
+        items[size - 1] = null;
         size -= 1;
         return x;
     }
 
     @Override
     public T removeLast() {
-        T x = get(-1);
+
+        T x = get(last);
+        items[last] = null;
+        last -= 1;
         size -= 1;
         return x;
     }
 
     @Override
     public T get(int index) {
-        if (index > size) {
+        if (index < 0 || index >= items.length) {
             return null;
         }
-        return items[(size + index) % items.length];
+        return items[(start - index) % items.length];
     }
 
     @Override
