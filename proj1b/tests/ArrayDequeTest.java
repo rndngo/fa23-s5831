@@ -156,6 +156,12 @@ public class ArrayDequeTest {
         ArrayDeque<Integer> lld2 = new ArrayDeque<>();
         assertThat(lld2.removeFirst()).isEqualTo(null);
         assertThat(lld2.removeLast()).isEqualTo(null);
+        lld2.addLast(666);
+        lld2.removeLast();
+        assertThat(lld2.isEmpty()).isTrue();
+        lld2.addFirst(666);
+        lld2.removeFirst();
+        assertThat(lld2.isEmpty()).isTrue();
         lld2.addLast(1);
         lld2.addLast(2);
         assertThat(lld2.toList()).containsExactly(1,2).inOrder();
