@@ -5,11 +5,12 @@ public class ArrayDeque<T> implements Deque<T> {
     private T[] items;
     private int size = 0;
     private int last = 0;
-    private int start = 0;
+    private int front = 0;
+    private final int limit = 8;
 
     public ArrayDeque() {
         this.size = 0;
-        int limit = 8;
+
         this.items = (T[]) new Object[limit];
     }
 
@@ -19,16 +20,17 @@ public class ArrayDeque<T> implements Deque<T> {
         if (size == items.length) {
             resize(size + 1);
         }
-        items[start] = x;
-        setMoving(-1);
+        if (size != 0){
+            MovingFoward();
+        }
+        items[front] = x;
         size += 1;
     }
 
-    private void setMoving(int moving){
-        start += moving;
-        start %= items.length;
-        if (start < 0){
-            start += items.length;
+    private void MovingFoward() {
+        front -= 1;
+        if (front < 0) {
+            front += limit;
         }
     }
 
@@ -43,14 +45,14 @@ public class ArrayDeque<T> implements Deque<T> {
     }
     private void resize(int l) {
         T[] items2 = (T[]) new Object[l];
-        for (int i = start; i < items.length ; i++) {
-            items2[i - start] = items[i];
+        for (int i = front; i < items.length; i++) {
+            items2[i - front] = items[i];
         }
-        for (int i = items.length - start; i < items.length; i++){
-            items2[i] = items[i - items.length + start];
+        for (int i = items.length - front; i < items.length; i++) {
+            items2[i] = items[i - items.length + front];
         }
         items = items2;
-        start = 0;
+        front = 0;
     }
 
     @Override
@@ -64,7 +66,7 @@ public class ArrayDeque<T> implements Deque<T> {
 
     @Override
     public boolean isEmpty() {
-        return size == 0 || items.length == 0;
+        return size == 0;
     }
 
     @Override
@@ -74,7 +76,7 @@ public class ArrayDeque<T> implements Deque<T> {
 
     @Override
     public T removeFirst() {
-        T x = get(start);
+        T x = get(front);
         items[size - 1] = null;
         size -= 1;
         return x;
@@ -95,7 +97,7 @@ public class ArrayDeque<T> implements Deque<T> {
         if (index < 0 || index >= items.length) {
             return null;
         }
-        return items[(start - index) % items.length];
+        return items[index];
     }
 
     @Override
