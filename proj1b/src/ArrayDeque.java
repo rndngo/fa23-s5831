@@ -4,13 +4,12 @@ import java.util.List;
 public class ArrayDeque<T> implements Deque<T> {
     private T[] items;
     private int size = 0;
-    private int last = 0;
-    private int front = 0;
-    private final int limit = 8;
+    private int last;
+    private int front;
+    private int limit = 8;
 
     public ArrayDeque() {
         this.size = 0;
-
         this.items = (T[]) new Object[limit];
     }
 
@@ -20,46 +19,53 @@ public class ArrayDeque<T> implements Deque<T> {
         if (size == items.length) {
             resize(size + 1);
         }
-        if (size != 0){
-            MovingFoward();
+        if (front < 0 && size != 0){
+            front = limit -1;
         }
         items[front] = x;
+        front -= 1;
         size += 1;
     }
 
-    private void MovingFoward() {
-        front -= 1;
-        if (front < 0) {
-            front += limit;
-        }
-    }
 
     @Override
     public void addLast(T x) {
         if (size == items.length) {
             resize(size + 1);
         }
-        items[size] = x;
+        if (last > limit - 1){
+            last = 0;
+        }
+        items[last] = x;
         last += 1;
         size += 1;
     }
     private void resize(int l) {
         T[] items2 = (T[]) new Object[l];
-        for (int i = front; i < items.length; i++) {
-            items2[i - front] = items[i];
-        }
-        for (int i = items.length - front; i < items.length; i++) {
-            items2[i] = items[i - items.length + front];
+        int index = front + 1;
+        for (int i = 1; i < l; i++) {
+            if (index > limit - 1){
+                index = 0;
+            }
+            items2[i] = items[index];
+            index++;
         }
         items = items2;
+        limit = l;
         front = 0;
     }
 
     @Override
     public List<T> toList() {
         List<T> returnList = new ArrayList<>();
-        for (int i = 0; i < size; i++) {
-            returnList.add(items[i]);
+        int index = front + 1;
+        for (int i = 0; i < limit; i++) {
+            if (index > limit - 1){
+                index = 0;
+            }
+            if (items[index] != null)
+                returnList.add(items[index]);
+            index++;
         }
         return returnList;
     }
@@ -78,13 +84,13 @@ public class ArrayDeque<T> implements Deque<T> {
     public T removeFirst() {
         T x = get(front);
         items[size - 1] = null;
+        front += 1;
         size -= 1;
         return x;
     }
 
     @Override
     public T removeLast() {
-
         T x = get(last);
         items[last] = null;
         last -= 1;

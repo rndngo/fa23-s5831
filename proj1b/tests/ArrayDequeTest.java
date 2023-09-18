@@ -1,15 +1,15 @@
-//import jh61b.utils.Reflection;
-//import org.junit.jupiter.api.DisplayName;
-//import org.junit.jupiter.api.Test;
-//
-//import java.lang.reflect.Field;
-//import java.util.List;
-//
-//import static com.google.common.truth.Truth.assertThat;
-//import static com.google.common.truth.Truth.assertWithMessage;
-//
-//public class ArrayDequeTest {
-//
+import jh61b.utils.Reflection;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import java.lang.reflect.Field;
+import java.util.List;
+
+import static com.google.common.truth.Truth.assertThat;
+import static com.google.common.truth.Truth.assertWithMessage;
+
+public class ArrayDequeTest {
+
 ////     @Test
 ////     @DisplayName("ArrayDeque has no fields besides backing array and primitives")
 ////     void noNonTrivialFields() {
@@ -19,7 +19,22 @@
 ////
 ////         assertWithMessage("Found fields that are not array or primitives").that(badFields).isEmpty();
 ////     }
-//
+    @Test
+    void testaddfirst(){
+        ArrayDeque<String> lld2 = new ArrayDeque<>();
+        lld2.addFirst("back"); //("back")
+        lld2.addFirst("middle"); //("middle" "back")
+        assertThat(lld2.toList()).containsExactly("middle","back").inOrder();
+        lld2.addFirst("go");
+        lld2.addFirst("go");
+        lld2.addFirst("go");
+        lld2.addFirst("go");
+        lld2.addFirst("go");
+        lld2.addFirst("go");
+        assertThat(lld2.toList()).containsExactly("go","go","go","go","go","go","middle","back").inOrder();
+        lld2.addFirst("resize");
+        assertThat(lld2.toList()).containsExactly("resize","go","go","go","go","go","go","middle","back").inOrder();
+    }
 //    @Test
 //    void Testfirst(){
 //        ArrayDeque<Integer> lld2 = new ArrayDeque<>();
@@ -154,6 +169,6 @@
 //        lld2.addFirst(0);
 //        assertThat(lld2.toList()).containsExactly(1, 2, 3, 4, 5, 6, 7, 8, 9, 0).inOrder();
 //    }
-//
-//}
-//
+
+}
+
