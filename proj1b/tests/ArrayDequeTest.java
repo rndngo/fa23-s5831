@@ -72,28 +72,24 @@ public class ArrayDequeTest {
         lld2.addLast("resize2");
         assertThat(lld2.toList()).containsExactly("resize","go","go","go","front","middle","back","go","go","resize2").inOrder();
      }
-//
-//    @Test
-//    void Testget(){
-//        ArrayDeque<Integer> lld2 = new ArrayDeque<>();
-//        assertThat(lld2.get(2)).isEqualTo(null);
-//        assertThat(lld2.get(0)).isEqualTo(null);
-//        lld2.addLast(1); //[1]
-//        lld2.addLast(2); //[2 1]
-//        lld2.addLast(3); //[3 2 1]
-//        assertThat(lld2.get(2)).isEqualTo(3);
-//
-//        lld2.addLast(4); // [4 3 2 1]
-//        lld2.addLast(5); // [5 4 3 2 1]
-//        lld2.addLast(6); // [6 5 4 3 2 1]
-//        lld2.addLast(7); // [7 6 5 4 3 2 1]
-//        lld2.addLast(8); // [8 7 6 5 4 3 2 1]
-//        assertThat(lld2.get(7)).isEqualTo(8);
-//        lld2.addLast(9); // [9 8 7 6 5 4 3 2 1]
-//        assertThat(lld2.get(8)).isEqualTo(9);
-//
-//    }
-//
+
+    @Test
+    void Testget(){
+        ArrayDeque<Integer> lld2 = new ArrayDeque<>();
+        assertThat(lld2.get(2)).isEqualTo(null);
+        assertThat(lld2.get(0)).isEqualTo(null);
+        lld2.addLast(1); //[1]
+        lld2.removeFirst();
+        assertThat(lld2.toList()).containsExactly(1).inOrder();
+        assertThat(lld2.get(2)).isEqualTo(null);
+        assertThat(lld2.get(1)).isEqualTo(1);
+        lld2.addFirst(0);
+        assertThat(lld2.get(0)).isEqualTo(0);
+
+
+
+    }
+
 //    @Test
 //    void Testempty(){
 //        ArrayDeque<Integer> lld2 = new ArrayDeque<>();

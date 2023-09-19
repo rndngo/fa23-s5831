@@ -100,6 +100,7 @@ public class ArrayDeque<T> implements Deque<T> {
         items[rf] = null;
         front += 1;
         size -= 1;
+        fm -= 1;
         return x;
     }
 
@@ -115,6 +116,7 @@ public class ArrayDeque<T> implements Deque<T> {
         items[rl] = null;
         last -= 1;
         size -= 1;
+        lm -= 1;
         return x;
     }
 
