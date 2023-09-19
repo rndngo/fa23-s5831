@@ -19,7 +19,7 @@ public class ArrayDeque<T> implements Deque<T> {
     @Override
     public void addFirst(T x) {
 
-        if (size == items.length) {
+        if (size == limit) {
             resize(size + 1);
         }
         if (front < 0 && size != 0) {
@@ -34,7 +34,7 @@ public class ArrayDeque<T> implements Deque<T> {
 
     @Override
     public void addLast(T x) {
-        if (size == items.length) {
+        if (size == limit) {
             resize(size + 1);
         }
         if (last > limit - 1) {
@@ -146,7 +146,7 @@ public class ArrayDeque<T> implements Deque<T> {
         return x;
     }
 
-    private void reverseresize(int l){
+    private void reverseresize(int l) {
         T[] items2 = (T[]) new Object[l];
         int index = front;
         for (int i = 1; i < l + 1; i++) {
