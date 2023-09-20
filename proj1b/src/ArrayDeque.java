@@ -3,53 +3,59 @@ import java.util.List;
 
 public class ArrayDeque<T> implements Deque<T> {
     private T[] items;
-    private int size = 0;
+    private int size;
     private int last;
     private int front;
-    private int fm = 0;
-    private int lm = 0;
-    private int truelimit = 8;
-    private int limit = 8;
+    private int truelimit;
+    private int limit;
 
     public ArrayDeque() {
-        last = 1;
+        size = 0;
+        last = 0;
         front = 0;
-        this.items = (T[]) new Object[limit];
+        limit = 8;
+        items = (T[]) new Object[limit];
+        truelimit = limit * 2;
     }
     @Override
     public void addFirst(T x) {
 
         if (size == limit) {
-            resize(size + 1);
+            resize(size * 3/2);
         }
-        if (front < 0 && size != 0) {
+        if (front < 0) {
             front = limit - 1;
         }
         items[front] = x;
         front -= 1;
+        if (size == 0){
+            last += 1;
+        }
         size += 1;
-        fm += 1;
     }
 
 
     @Override
     public void addLast(T x) {
+
         if (size == limit) {
-            resize(size + 1);
+            resize(size * 3/2);
         }
         if (last > limit - 1) {
             last = 0;
         }
         items[last] = x;
         last += 1;
+        if (size == 0){
+            front -= 1;
+        }
         size += 1;
-        lm += 1;
     }
 
     private void resize(int l) {
         T[] items2 = (T[]) new Object[l];
         int index = front + 1;
-        for (int i = 1; i < l; i++) {
+        for (int i = 0; i < limit; i++) {
             if (index > limit - 1) {
                 index = 0;
             }
@@ -58,8 +64,8 @@ public class ArrayDeque<T> implements Deque<T> {
         }
         items = items2;
         limit = l;
-        front = 0;
-        last = 0;
+        front = limit - 1;
+        last = size;
     }
 
     @Override
@@ -90,65 +96,56 @@ public class ArrayDeque<T> implements Deque<T> {
 
     @Override
     public T removeFirst() {
-        int rf = front;
-        if (fm != 0) {
-            rf += 1;
+        front += 1;
+        if (front > limit - 1) {
+            front = 0;
         }
-        if (get(rf) == null) {
+        if (get(front) == null) {
+            front -= 1;
             return null;
         }
-        if (rf > limit - 1) {
-            rf = 0;
-        }
-        if (rf < 0) {
-            rf = limit - 1;
-        }
-
-        T x = get(rf);
-        items[rf] = null;
-        front += 1;
+        T x = get(front);
+        items[front] = null;
         if (size != 0) {
             size -= 1;
         }
-        if (size == limit - 1 && limit != truelimit) {
+        if (size == 0){
+            last -= 1;
+        }
+        if (size == (limit / 4) && limit > truelimit) {
             reverseresize(size);
         }
-        fm -= 1;
         return x;
     }
 
     @Override
     public T removeLast() {
-        int rl = last;
-        if (lm != 0) {
-            rl -= 1;
+        last -= 1;
+        if (last < 0) {
+            last = limit - 1;
         }
-        if (get(rl) == null) {
+        if (get(last) == null) {
+            last += 1;
             return null;
         }
-        if (rl > limit - 1) {
-            rl = 0;
-        }
-        if (rl < 0) {
-            rl = limit - 1;
-        }
 
-        T x = get(rl);
-        items[rl] = null;
-        last -= 1;
+        T x = get(last);
+        items[last] = null;
         if (size != 0) {
             size -= 1;
         }
-        if (size == limit - 1 && limit != truelimit) {
+        if (size == 0 ) {
+            front += 1;
+        }
+        if (size == (limit / 4) && limit > truelimit) {
             reverseresize(size);
         }
-        lm -= 1;
         return x;
     }
 
     private void reverseresize(int l) {
         T[] items2 = (T[]) new Object[l];
-        int index = front;
+        int index = front + 1;
         for (int i = 1; i < l + 1; i++) {
             if (index > limit - 1) {
                 index = 0;
@@ -158,12 +155,12 @@ public class ArrayDeque<T> implements Deque<T> {
         }
         items = items2;
         limit = l;
-        front = -1;
-        last = 0;
+        front = limit - 1;
+        last = size;
     }
     @Override
     public T get(int index) {
-        if (index > limit - 1) {
+        if (index > limit -1){
             index = 0;
         }
         if (index < 0) {

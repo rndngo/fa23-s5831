@@ -96,13 +96,17 @@ public class ArrayDequeTest {
         assertThat(lld2.get(0)).isEqualTo(null);
         lld2.addLast(1); //[1]
         lld2.removeFirst();
-        assertThat(lld2.toList()).containsExactly(1).inOrder();
-        assertThat(lld2.get(2)).isEqualTo(null);
-        assertThat(lld2.get(1)).isEqualTo(1);
+        assertThat(lld2.isEmpty()).isTrue();
         lld2.addFirst(0);
+        assertThat(lld2.get(2)).isEqualTo(null);
+        assertThat(lld2.get(1)).isEqualTo(null);
+        assertThat(lld2.get(7)).isEqualTo(null);
         assertThat(lld2.get(0)).isEqualTo(0);
+        lld2.addFirst(0);
+        assertThat(lld2.get(7)).isEqualTo(0);
         lld2.addFirst(9);
-        assertThat(lld2.get(-999)).isEqualTo(9);
+        assertThat(lld2.get(-999)).isEqualTo(0);
+        assertThat((lld2.get(6))).isEqualTo(9);
     }
 
     @Test
@@ -151,10 +155,10 @@ public class ArrayDequeTest {
 
         lld2.addLast(666);
         lld2.removeFirst();
-        assertThat(lld2.get(1)).isEqualTo(666);
+        assertThat(lld2.isEmpty()).isTrue();
         lld2.addFirst(666);
         lld2.removeLast();
-        assertThat(lld2.get(0)).isEqualTo(666);
+        assertThat(lld2.isEmpty()).isTrue();
         lld2 = new ArrayDeque<>();
 
         lld2.addLast(1);
@@ -163,13 +167,13 @@ public class ArrayDequeTest {
         lld2.addLast(3);
         assertThat(lld2.toList()).containsExactly(1,2,3).inOrder();
         lld2.removeFirst();
-        assertThat(lld2.toList()).containsExactly(1,2,3).inOrder();
+        assertThat(lld2.toList()).containsExactly(2,3).inOrder();
         lld2.removeLast();
-        assertThat(lld2.toList()).containsExactly(1,2).inOrder();
+        assertThat(lld2.toList()).containsExactly(2).inOrder();
         lld2.addFirst(4);
-        assertThat(lld2.toList()).containsExactly(4,1,2).inOrder();
+        assertThat(lld2.toList()).containsExactly(4,2).inOrder();
         lld2.removeFirst();
-        assertThat(lld2.toList()).containsExactly(1,2).inOrder();
+        assertThat(lld2.toList()).containsExactly(2).inOrder();
     }
 
     @Test
