@@ -8,6 +8,8 @@ public class ArrayDeque<T> implements Deque<T> {
     private int front;
     private int limit;
 
+    public static final int L = 16;
+
     public ArrayDeque() {
         size = 0;
         last = 0;
@@ -67,7 +69,7 @@ public class ArrayDeque<T> implements Deque<T> {
         front = (front + 1) % limit;
         size--;
 
-        if (limit > 16 && size <= limit / 4) {
+        if (limit > L && size <= limit / 4) {
             resize(limit / 2);
         }
         return removedItem;
@@ -83,7 +85,7 @@ public class ArrayDeque<T> implements Deque<T> {
         items[last] = null;
         size--;
 
-        if (limit > 16 && size <= limit / 4) {
+        if (limit > L && size <= limit / 4) {
             resize(limit / 2);
         }
         return removedItem;

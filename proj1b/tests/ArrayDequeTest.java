@@ -241,23 +241,23 @@ public class ArrayDequeTest {
     @Test
     void testreverseresize() {
         ArrayDeque<Integer> lld2 = new ArrayDeque<>();
-        for (int i = 0; i < 1280; i++) {
+        for (int i = 0; i < 32; i++) {
             lld2.addLast(i);
         }
         assertThat(lld2.isEmpty()).isFalse();
-        assertThat(lld2.size()).isEqualTo(1280);
-        for (int i = 0; i < 1400 - (1280/2); i++) {
+        assertThat(lld2.size()).isEqualTo(32);
+        for (int i = 0; i < 28; i++) {
             lld2.removeLast();
         }
-        assertThat(lld2.size()).isEqualTo(520);
+        assertThat(lld2.size()).isEqualTo(4);
         lld2 = new ArrayDeque<>();
-        for (int i = 0; i < 1280; i++) {
+        for (int i = 0; i < 32; i++) {
             lld2.addFirst(i);
         }
-        for (int i = 0; i < 1400 - (1280/2); i++) {
+        for (int i = 0; i < 28; i++) {
             lld2.removeFirst();
         }
-        assertThat(lld2.size()).isEqualTo(520);
+        assertThat(lld2.size()).isEqualTo(4);
     }
 
     @Test
