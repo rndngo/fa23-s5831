@@ -192,7 +192,7 @@ public class ArrayDeque<T> implements Deque<T> {
     private void reverseresize(int l) {
         T[] items2 = (T[]) new Object[l];
         int index = front + 1;
-        for (int i = 1; i < l + 1; i++) {
+        for (int i = 1; i < l; i++) {
             if (index > limit - 1) {
                 index = 0;
             }
