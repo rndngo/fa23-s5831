@@ -98,13 +98,14 @@ public class ArrayDequeTest {
         assertThat(lld2.get(1)).isEqualTo(null);
         assertThat(lld2.get(7)).isEqualTo(null);
         assertThat(lld2.get(0)).isEqualTo(0);
-        lld2.addFirst(0);
-        assertThat(lld2.get(7)).isEqualTo(0);
+        lld2.addFirst(2);
+        assertThat(lld2.get(7)).isEqualTo(null);
         lld2.addFirst(9);
-        assertThat(lld2.get(-999)).isEqualTo(0);
-        assertThat((lld2.get(6))).isEqualTo(9);
+        assertThat(lld2.get(-999)).isEqualTo(null);
+        assertThat((lld2.get(6))).isEqualTo(null);
         lld2.addLast(1);
-        assertThat(lld2.get(-1)).isEqualTo(0);
+        assertThat(lld2.get(-1)).isEqualTo(null);
+
     }
 
     @Test
@@ -179,6 +180,30 @@ public class ArrayDequeTest {
     }
 
     @Test
+    void testremoves2() {
+        ArrayDeque<Integer> lld2 = new ArrayDeque<>();
+        lld2.addFirst(1);
+        lld2.addFirst(2);
+        assertThat(lld2.toList()).containsExactly(2,1).inOrder();
+        lld2.addFirst(3);
+        assertThat(lld2.toList()).containsExactly(3,2,1).inOrder();
+        lld2.removeLast();
+        assertThat(lld2.toList()).containsExactly(3,2).inOrder();
+        lld2.removeLast();
+        assertThat(lld2.toList()).containsExactly(3).inOrder();
+        lld2.addFirst(4);
+        assertThat(lld2.toList()).containsExactly(4,3).inOrder();
+        lld2.removeFirst();
+        assertThat(lld2.toList()).containsExactly(3).inOrder();
+        lld2.addLast(-1);
+        assertThat(lld2.toList()).containsExactly(3,-1).inOrder();
+        lld2.removeLast();
+        lld2.removeLast();
+        lld2.removeLast();
+        assertThat(lld2.isEmpty()).isTrue();
+    }
+
+    @Test
     void testresize(){
         ArrayDeque<String> lld2 = new ArrayDeque<>();
         lld2.addLast("front"); //("back")
@@ -221,18 +246,18 @@ public class ArrayDequeTest {
         }
         assertThat(lld2.isEmpty()).isFalse();
         assertThat(lld2.size()).isEqualTo(1280);
-        for (int i = 0; i < 2250 - (1280/4); i++) {
+        for (int i = 0; i < 1400 - (1280/2); i++) {
             lld2.removeLast();
         }
-        assertThat(lld2.size()).isEqualTo(382);
+        assertThat(lld2.size()).isEqualTo(520);
         lld2 = new ArrayDeque<>();
         for (int i = 0; i < 1280; i++) {
             lld2.addFirst(i);
         }
-        for (int i = 0; i < 2800 - (1280/4); i++) {
+        for (int i = 0; i < 1400 - (1280/2); i++) {
             lld2.removeFirst();
         }
-        assertThat(lld2.size()).isEqualTo(1021);
+        assertThat(lld2.size()).isEqualTo(520);
     }
 
     @Test
@@ -242,7 +267,7 @@ public class ArrayDequeTest {
         lld2.addLast(1);
         lld2.addFirst(0);
         lld2.addFirst(-1);
-        assertThat(lld2.get(-1)).isEqualTo(-1);
+        assertThat(lld2.get(-1)).isEqualTo(null);
     }
 
 }
