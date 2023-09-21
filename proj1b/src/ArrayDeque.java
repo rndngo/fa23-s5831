@@ -11,7 +11,7 @@ public class ArrayDeque<T> implements Deque<T> {
 
     public ArrayDeque() {
         size = 0;
-        last = 0;
+        last = 1;
         front = 0;
         limit = 8;
         items = (T[]) new Object[limit];
@@ -21,16 +21,13 @@ public class ArrayDeque<T> implements Deque<T> {
     public void addFirst(T x) {
 
         if (size == limit) {
-            resize(size * 3/2);
+            resize(size * 3 / 2);
         }
         if (front < 0) {
             front = limit - 1;
         }
         items[front] = x;
         front -= 1;
-        if (size == 0){
-            last += 1;
-        }
         size += 1;
     }
 
@@ -39,23 +36,20 @@ public class ArrayDeque<T> implements Deque<T> {
     public void addLast(T x) {
 
         if (size == limit) {
-            resize(size * 3/2);
+            resize(size * 3 / 2);
         }
         if (last > limit - 1) {
             last = 0;
         }
         items[last] = x;
         last += 1;
-        if (size == 0){
-            front -= 1;
-        }
         size += 1;
     }
 
     private void resize(int l) {
         T[] items2 = (T[]) new Object[l];
         int index = front + 1;
-        for (int i = 0; i < limit; i++) {
+        for (int i = 1; i < limit + 1; i++) {
             if (index > limit - 1) {
                 index = 0;
             }
@@ -64,8 +58,8 @@ public class ArrayDeque<T> implements Deque<T> {
         }
         items = items2;
         limit = l;
-        front = limit - 1;
-        last = size;
+        front = 0;
+        last = size + 1;
     }
 
     @Override
@@ -104,18 +98,21 @@ public class ArrayDeque<T> implements Deque<T> {
             front -= 1;
             return null;
         }
-        T x = get(front);
-        items[front] = null;
-        if (size != 0) {
-            size -= 1;
+        else {
+            T x = get(front);
+            items[front] = null;
+            if (size != 0) {
+                size -= 1;
+            }
+            if (size == 0) {
+                front = 0;
+                last = 1;
+            }
+            if (size == (limit / 4) && limit > truelimit) {
+                reverseresize(size);
+            }
+            return x;
         }
-        if (size == 0){
-            last -= 1;
-        }
-        if (size == (limit / 4) && limit > truelimit) {
-            reverseresize(size);
-        }
-        return x;
     }
 
     @Override
@@ -128,19 +125,21 @@ public class ArrayDeque<T> implements Deque<T> {
             last += 1;
             return null;
         }
-
-        T x = get(last);
-        items[last] = null;
+        else {
+            T x = get(last);
+            items[last] = null;
         if (size != 0) {
             size -= 1;
         }
-        if (size == 0 ) {
-            front += 1;
+        if (size == 0) {
+            front = 0;
+            last = 1;
         }
         if (size == (limit / 4) && limit > truelimit) {
             reverseresize(size);
         }
         return x;
+        }
     }
 
     private void reverseresize(int l) {
@@ -160,7 +159,7 @@ public class ArrayDeque<T> implements Deque<T> {
     }
     @Override
     public T get(int index) {
-        if (index > limit -1){
+        if (index > limit - 1) {
             index = 0;
         }
         if (index < 0) {

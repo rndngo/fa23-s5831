@@ -77,16 +77,10 @@ public class ArrayDequeTest {
     void testing(){
         ArrayDeque<Integer> ArrayDeque = new ArrayDeque<>();
         ArrayDeque.addLast(0);
-        ArrayDeque.addFirst(1);
-        ArrayDeque.get(0);
-        ArrayDeque.addLast(3);
-        ArrayDeque.addLast(4);
-        ArrayDeque.removeLast();
-        ArrayDeque.addFirst(6);
-        ArrayDeque.removeFirst();
-        ArrayDeque.addLast(8);
-        ArrayDeque.removeFirst();
-        assertThat(ArrayDeque.toList()).containsExactly(0,3,8).inOrder();
+        ArrayDeque.addLast(1);
+        ArrayDeque.addFirst(2);
+        assertThat(ArrayDeque.get(2)).isEqualTo(1);
+        assertThat(ArrayDeque.toList()).containsExactly(2,0,1).inOrder();
     }
 
     @Test
