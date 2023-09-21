@@ -86,11 +86,13 @@ public class ArrayDequeTest {
     @Test
     void Testget(){
         ArrayDeque<Integer> lld2 = new ArrayDeque<>();
+        assertThat(lld2.toList()).containsExactly().inOrder();
         assertThat(lld2.get(2)).isEqualTo(null);
         assertThat(lld2.get(0)).isEqualTo(null);
         lld2.addLast(1); //[1]
         lld2.removeFirst();
         assertThat(lld2.isEmpty()).isTrue();
+        assertThat(lld2.toList()).containsExactly().inOrder();
         lld2.addFirst(0);
         assertThat(lld2.get(2)).isEqualTo(null);
         assertThat(lld2.get(1)).isEqualTo(null);
@@ -101,6 +103,8 @@ public class ArrayDequeTest {
         lld2.addFirst(9);
         assertThat(lld2.get(-999)).isEqualTo(0);
         assertThat((lld2.get(6))).isEqualTo(9);
+        lld2.addLast(1);
+        assertThat(lld2.get(-1)).isEqualTo(0);
     }
 
     @Test
@@ -143,16 +147,20 @@ public class ArrayDequeTest {
         lld2.addLast(666);
         lld2.removeLast();
         assertThat(lld2.isEmpty()).isTrue();
+        assertThat(lld2.toList()).containsExactly().inOrder();
         lld2.addFirst(666);
         lld2.removeFirst();
         assertThat(lld2.isEmpty()).isTrue();
+        assertThat(lld2.toList()).containsExactly().inOrder();
 
         lld2.addLast(666);
         lld2.removeFirst();
         assertThat(lld2.isEmpty()).isTrue();
+        assertThat(lld2.toList()).containsExactly().inOrder();
         lld2.addFirst(666);
         lld2.removeLast();
         assertThat(lld2.isEmpty()).isTrue();
+        assertThat(lld2.toList()).containsExactly().inOrder();
         lld2 = new ArrayDeque<>();
 
         lld2.addLast(1);
@@ -187,6 +195,8 @@ public class ArrayDequeTest {
         lld2.removeLast();
         assertThat(lld2.toList()).containsExactly("resize","go","go","go","front","middle","back","go","go").inOrder();
         lld2.removeFirst();
+        assertThat(lld2.toList()).containsExactly("go","go","go","front","middle","back","go","go").inOrder();
+
     }
 
     @Test
