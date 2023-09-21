@@ -94,8 +94,8 @@ public class ArrayDeque<T> implements Deque<T> {
     @Override
     public T removeFirst() {
         int prev = front + 1;
-        if (prev < 0) {
-            prev = limit -1;
+        if (prev > limit -1) {
+            prev = 0;
         }
         T x = get(prev);
         if (x == null) {

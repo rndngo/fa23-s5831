@@ -221,10 +221,18 @@ public class ArrayDequeTest {
         }
         assertThat(lld2.isEmpty()).isFalse();
         assertThat(lld2.size()).isEqualTo(128);
-        for (int i = 0; i < (128/4) + 5; i++) {
+        for (int i = 0; i < 117- (128/4); i++) {
             lld2.removeLast();
         }
-        assertThat(lld2.size()).isEqualTo(91);
+        assertThat(lld2.size()).isEqualTo(43);
+        lld2 = new ArrayDeque<>();
+        for (int i = 0; i < 128; i++) {
+            lld2.addFirst(i);
+        }
+        for (int i = 0; i < 90 - (128/4); i++) {
+            lld2.removeFirst();
+        }
+        assertThat(lld2.size()).isEqualTo(90);
     }
 
     @Test
