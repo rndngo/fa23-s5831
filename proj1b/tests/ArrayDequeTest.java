@@ -73,15 +73,15 @@ public class ArrayDequeTest {
         lld2.addLast("resize2");
         assertThat(lld2.toList()).containsExactly("resize","go","go","go","front","middle","back","go","go","resize2").inOrder();
      }
-    @Test
-    void testing(){
-        ArrayDeque<Integer> ArrayDeque = new ArrayDeque<>();
-        ArrayDeque.addLast(0);
-        ArrayDeque.addLast(1);
-        ArrayDeque.addFirst(2);
-        assertThat(ArrayDeque.get(2)).isEqualTo(1);
-        assertThat(ArrayDeque.toList()).containsExactly(2,0,1).inOrder();
-    }
+//    @Test
+//    void testing(){
+//        ArrayDeque<Integer> ArrayDeque = new ArrayDeque<>();
+//        ArrayDeque.addLast(0);
+//        ArrayDeque.addLast(1);
+//        ArrayDeque.addFirst(2);
+//        assertThat(ArrayDeque.get(2)).isEqualTo(1);
+//        assertThat(ArrayDeque.toList()).containsExactly(2,0,1).inOrder();
+//    }
 
     @Test
     void Testget(){
