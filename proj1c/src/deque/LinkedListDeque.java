@@ -1,7 +1,6 @@
 package deque;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -121,7 +120,7 @@ public class LinkedListDeque<T> implements Deque<T> {
         }
     }
     private class LLSetIterator implements Iterator<T> {
-        public Node wizPos;
+        private Node wizPos;
         public LLSetIterator() {
             wizPos = sentinel;
         }
@@ -140,22 +139,11 @@ public class LinkedListDeque<T> implements Deque<T> {
     @Override
     public String toString() {
         return this.toList().toString();
-//        StringBuilder returnSB = new StringBuilder("{");
-//        for (int i = 0; i < size - 1; i += 1) {
-//            returnSB.append(items[i].toString());
-//            returnSB.append(", ");
-//        }
-//        returnSB.append(items[size - 1]);
-//        returnSB.append("}");
-//        return returnSB.toString();
     }
     @Override
     public boolean equals(Object obj) {
-        if (obj == this) {
-            return true;
-        }
-        if (obj instanceof LinkedListDeque otherobj) {
-            if (this.size != otherobj.size) {
+        if (obj instanceof Deque otherobj) {
+            if (this.size != otherobj.size()) {
                 return false;
             }
             for (T x : this) {
@@ -167,7 +155,8 @@ public class LinkedListDeque<T> implements Deque<T> {
         }
         return false;
     }
-    private boolean contains(T x) {
+    @Override
+    public boolean contains(T x) {
         for (int i = 0; i < size; i += 1) {
             if (this.get(i).equals(x)) {
                 return true;

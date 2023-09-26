@@ -1,5 +1,6 @@
 import deque.Deque;
 import deque.LinkedListDeque;
+import deque.ArrayDeque;
 import jh61b.utils.Reflection;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,6 +34,22 @@ public class LinkedListDequeTest {
     void testequals() {
         Deque<String> lld1 = new LinkedListDeque<>();
         Deque<String> lld2 = new LinkedListDeque<>();
+
+        lld1.addLast("front");
+        lld1.addLast("middle");
+        lld1.addLast("back");
+
+        lld2.addLast("front");
+        lld2.addLast("middle");
+        lld2.addLast("back");
+
+        assertThat(lld1.equals(lld2)).isTrue();
+        assertThat(lld1).isEqualTo(lld2);
+    }
+    @Test
+    void testequalswithll() {
+        ArrayDeque<String> lld1 = new ArrayDeque<>();
+        LinkedListDeque<String> lld2 = new LinkedListDeque<>();
 
         lld1.addLast("front");
         lld1.addLast("middle");
