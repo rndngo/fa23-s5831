@@ -127,8 +127,8 @@ public class ArrayDeque<T> implements Deque<T>  {
 
         @Override
         public T next() {
-            T returnItem = get(wizPos);
             wizPos += 1;
+            T returnItem = get(wizPos);
             return returnItem;
         }
     }
