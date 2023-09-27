@@ -142,8 +142,8 @@ public class ArrayDeque<T> implements Deque<T> {
             if (this.size != otherobj.size()) {
                 return false;
             }
-            for (T x : this) {
-                if (!otherobj.contains(x)) {
+            for (Object x : otherobj) {
+                if (!this.contains((T) x)) {
                     return false;
                 }
             }
@@ -151,8 +151,7 @@ public class ArrayDeque<T> implements Deque<T> {
         }
         return false;
     }
-    @Override
-    public boolean contains(T x) {
+    private  boolean contains(T x) {
         for (int i = 0; i < size; i += 1) {
             if (this.get(i).equals(x)) {
                 return true;
