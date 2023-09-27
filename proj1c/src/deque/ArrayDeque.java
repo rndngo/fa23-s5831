@@ -2,7 +2,7 @@ package deque;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;;
+import java.util.List;
 
 public class ArrayDeque<T> implements Deque<T>  {
     private T[] items;
@@ -115,8 +115,8 @@ public class ArrayDeque<T> implements Deque<T>  {
         throw new UnsupportedOperationException("No need to implement getRecursive for proj 1b");
     }
     private class ArraySetIterator implements Iterator<T> {
-        public T[] items;
-        public int wizPos;
+        private T[] items;
+        private int wizPos;
         private int size;
 
         public ArraySetIterator() {
@@ -129,7 +129,7 @@ public class ArrayDeque<T> implements Deque<T>  {
 
         @Override
         public T next() {
-            T returnItem = this.items[wizPos];
+            T returnItem = get(wizPos);
             wizPos += 1;
             return returnItem;
         }
@@ -143,8 +143,8 @@ public class ArrayDeque<T> implements Deque<T>  {
         if (obj == this) {
             return true;
         }
-        if (obj instanceof ArrayDeque otherobj) {
-            if (this.size != otherobj.size) {
+        if (obj instanceof Deque otherobj) {
+            if (this.size != otherobj.size()) {
                 return false;
             }
             for (T x : this) {
