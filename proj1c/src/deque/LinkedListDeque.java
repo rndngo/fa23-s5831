@@ -142,10 +142,7 @@ public class LinkedListDeque<T> implements Deque<T> {
     }
     @Override
     public boolean equals(Object obj) {
-        if (obj == this) {
-            return true;
-        }
-        if (obj instanceof java.util.Deque otherobj) {
+        if (obj instanceof Deque otherobj) {
             if (this.size != otherobj.size()) {
                 return false;
             }
@@ -158,7 +155,8 @@ public class LinkedListDeque<T> implements Deque<T> {
         }
         return false;
     }
-    private boolean contains(T x) {
+    @Override
+    public boolean contains(T x) {
         for (int i = 0; i < size; i += 1) {
             if (this.get(i).equals(x)) {
                 return true;

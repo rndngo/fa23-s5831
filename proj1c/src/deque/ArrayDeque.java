@@ -115,7 +115,6 @@ public class ArrayDeque<T> implements Deque<T>  {
         throw new UnsupportedOperationException("No need to implement getRecursive for proj 1b");
     }
     private class ArraySetIterator implements Iterator<T> {
-        private T[] items;
         private int wizPos;
         private int size;
 
@@ -140,10 +139,7 @@ public class ArrayDeque<T> implements Deque<T>  {
     }
     @Override
     public boolean equals(Object obj) {
-        if (obj == this) {
-            return true;
-        }
-        if (obj instanceof java.util.Deque otherobj) {
+        if (obj instanceof Deque otherobj) {
             if (this.size != otherobj.size()) {
                 return false;
             }
@@ -156,7 +152,8 @@ public class ArrayDeque<T> implements Deque<T>  {
         }
         return false;
     }
-    private boolean contains(T x) {
+    @Override
+    public boolean contains(T x) {
         for (int i = 0; i < size; i += 1) {
             if (this.get(i).equals(x)) {
                 return true;
