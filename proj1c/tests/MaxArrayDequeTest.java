@@ -19,6 +19,7 @@ public class MaxArrayDequeTest {
         for (int i = 10; i > 0; i --) {
             lld1.addLast(i);
         }
+        lld1.addLast(900);
         for (Integer x : lld1) {
             System.out.println(x);
         }
