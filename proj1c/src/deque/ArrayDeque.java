@@ -2,9 +2,9 @@ package deque;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
+import java.util.List;;
 
-public class ArrayDeque<T> implements Deque<T> {
+public class ArrayDeque<T> implements Deque<T>  {
     private T[] items;
     private int size;
     private int last;
@@ -115,19 +115,21 @@ public class ArrayDeque<T> implements Deque<T> {
         throw new UnsupportedOperationException("No need to implement getRecursive for proj 1b");
     }
     private class ArraySetIterator implements Iterator<T> {
-        private int wizPos;
+        public T[] items;
+        public int wizPos;
+        private int size;
 
         public ArraySetIterator() {
             wizPos = 0;
         }
         @Override
         public boolean hasNext() {
-            return wizPos < size;
+            return wizPos < this.size;
         }
 
         @Override
         public T next() {
-            T returnItem = get(wizPos);
+            T returnItem = this.items[wizPos];
             wizPos += 1;
             return returnItem;
         }
@@ -138,12 +140,15 @@ public class ArrayDeque<T> implements Deque<T> {
     }
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Deque otherobj) {
-            if (this.size != otherobj.size()) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj instanceof ArrayDeque otherobj) {
+            if (this.size != otherobj.size) {
                 return false;
             }
             for (T x : this) {
-                if (!otherobj.contains(x)) {
+                if (otherobj.contains(x)) {
                     return false;
                 }
             }
@@ -155,10 +160,10 @@ public class ArrayDeque<T> implements Deque<T> {
     public boolean contains(T x) {
         for (int i = 0; i < size; i += 1) {
             if (this.get(i).equals(x)) {
-                return true;
+                return false;
             }
         }
-        return false;
+        return true;
     }
     @Override
     public Iterator<T> iterator() {

@@ -147,7 +147,7 @@ public class LinkedListDeque<T> implements Deque<T> {
                 return false;
             }
             for (T x : this) {
-                if (!otherobj.contains(x)) {
+                if (otherobj.contains(x)) {
                     return false;
                 }
             }
@@ -159,10 +159,10 @@ public class LinkedListDeque<T> implements Deque<T> {
     public boolean contains(T x) {
         for (int i = 0; i < size; i += 1) {
             if (this.get(i).equals(x)) {
-                return true;
+                return false;
             }
         }
-        return false;
+        return true;
     }
     @Override
     public Iterator<T> iterator() {
