@@ -11,11 +11,10 @@ public class MaxArrayDeque<T> extends ArrayDeque<T> {
         if (this.isEmpty()) {
             return null;
         }
-        T first = null;
         T second = null;
         T max = null;
         for (int i = 0; i < this.size(); i++) {
-            first = this.get(i);
+            T first = this.get(i);
             int x = mycomparator.compare(first, second);
             if (x < 0) {
                 max = second;
@@ -29,11 +28,10 @@ public class MaxArrayDeque<T> extends ArrayDeque<T> {
         if (this.isEmpty()) {
             return null;
         }
-        T first = null;
         T second = null;
         T max = null;
         for (int i = 0; i < this.size(); i++) {
-            first = this.get(i);
+            T first = this.get(i);
             int x = c.compare(first, second);
             if (x < 0) {
                 max = second;

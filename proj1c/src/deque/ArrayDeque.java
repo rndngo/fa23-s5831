@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class ArrayDeque<T> implements Deque<T>  {
+public class ArrayDeque<T> implements Deque<T> {
     private T[] items;
     private int size;
     private int last;
@@ -127,8 +127,8 @@ public class ArrayDeque<T> implements Deque<T>  {
 
         @Override
         public T next() {
-            wizPos += 1;
             T returnItem = get(wizPos);
+            wizPos += 1;
             return returnItem;
         }
     }

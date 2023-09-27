@@ -35,5 +35,6 @@ public class MaxArrayDequeTest {
         lld1.addFirst("backtomiddle");
         lld1.addFirst("backtofront");
         System.out.println(lld1.stream().max(String::compareTo));
+
     }
 }
