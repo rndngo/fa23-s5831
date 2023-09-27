@@ -11,7 +11,7 @@ public class MaxArrayDeque<T> extends ArrayDeque<T> {
         if (this.isEmpty()) {
             return null;
         }
-        T second = null;
+        T second = this.get(0);
         T max = null;
         for (int i = 0; i < this.size(); i++) {
             T first = this.get(i);
