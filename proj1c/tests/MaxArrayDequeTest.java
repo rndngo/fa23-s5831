@@ -1,9 +1,9 @@
 import deque.MaxArrayDeque;
 import org.junit.jupiter.api.*;
 import deque.LinkedListDeque;
-import java.util.ArrayDeque;
+import deque.ArrayDeque;
 import java.util.Comparator;
-import java.util.Deque;
+import deque.Deque;
 
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
@@ -12,7 +12,7 @@ public class MaxArrayDequeTest {
     @Test
     void firsttest() {
 
-        Deque<Integer> lld1 = new ArrayDeque<>();
+        MaxArrayDeque<Integer> lld1 = new MaxArrayDeque<>(Integer::compareTo);
         for (int i = 0; i < 10; i ++) {
             lld1.addFirst(i);
         }
@@ -23,18 +23,18 @@ public class MaxArrayDequeTest {
             System.out.println(x);
         }
 
-        System.out.println(lld1.stream().max(Integer::compareTo));
+        System.out.println(lld1.max());
     }
 
     @Test
     void secondtest() {
-        Deque<String> lld1 = new ArrayDeque<>();
+        MaxArrayDeque<String> lld1 = new MaxArrayDeque<>(String::compareTo);
         lld1.addFirst("front");
         lld1.addFirst("middle");
         lld1.addFirst("last");
         lld1.addFirst("backtomiddle");
         lld1.addFirst("backtofront");
-        System.out.println(lld1.stream().max(String::compareTo));
+        System.out.println(lld1.max());
 
     }
 }

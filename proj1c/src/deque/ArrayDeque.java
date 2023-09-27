@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class ArrayDeque<T> implements Deque<T>  {
+public class ArrayDeque<T> implements Deque<T> {
     private T[] items;
     private int size;
     private int last;
@@ -116,14 +116,13 @@ public class ArrayDeque<T> implements Deque<T>  {
     }
     private class ArraySetIterator implements Iterator<T> {
         private int wizPos;
-        private int size;
 
         public ArraySetIterator() {
             wizPos = 0;
         }
         @Override
         public boolean hasNext() {
-            return wizPos < this.size;
+            return wizPos < size;
         }
 
         @Override
