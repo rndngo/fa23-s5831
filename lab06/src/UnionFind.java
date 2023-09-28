@@ -1,3 +1,5 @@
+import java.util.List;
+
 public class UnionFind {
     /**
      * DO NOT DELETE OR MODIFY THIS, OTHERWISE THE TESTS WILL NOT PASS.
@@ -19,14 +21,7 @@ public class UnionFind {
     /* Returns the size of the set V belongs to. */
     public int sizeOf(int v) {
         // TODO: YOUR CODE HERE
-        int size = 0;
-        int branch = data[v];
-        for (int i = 0; i < data.length; i++) {
-            if (data[i] == branch) {
-                size ++;
-            }
-        }
-        return size;
+        return -1 * find(v);
     }
 
     /* Returns the parent of V. If V is the root of a tree, returns the
@@ -34,7 +29,7 @@ public class UnionFind {
     public int parent(int v) {
         // TODO: YOUR CODE HERE
         if (v < 0) {
-            return find(v);
+            return v;
         }
         return data[v];
     }
@@ -65,13 +60,39 @@ public class UnionFind {
        function, throw an IllegalArgumentException. */
     public int find(int v) {
         // TODO: YOUR CODE HERE
-        if (v > data.length) {
+        if (v >= data.length) {
             throw new IllegalArgumentException();
         }
         if (parent(v) < 0) {
             return v;
         }
+        int root = find(parent(v));
+        data[v] = root;
         return parent(v);
+
+
+//        int c = 0;
+//        int[] b = new int[999];
+//        while (parent(v) > 0) {
+//
+//            b[c] = v;
+//            c ++;
+//            int[] b2 = new int[c+1];
+//            for (int i = 0; i < b.length; i ++) {
+//                b2[i] = b[i];
+//            }
+//            b = b2;
+//
+//        }
+//        for (int i = 0; i < b.length; i ++) {
+//            data[b[i]] = v;
+//        }
+//        return v
+
+//        if (parent(v) < 0) {
+//            return v;
+//        }
+//        return parent(v);
     }
 
     /* Connects two items V1 and V2 together by connecting their respective
@@ -81,12 +102,15 @@ public class UnionFind {
        already connected should not change the structure. */
     public void union(int v1, int v2) {
         // TODO: YOUR CODE HERE
-        if (parent(v1) == parent(v2)) {
+        if (v1 == v2) {
+            return;
+        }
+        else if (parent(v1) == parent(v2)) {
             data[v2] = data[v2] + data[v1];
             data[v1] = v2;
         }
         else if (parent(v1) < 0 && parent(v2) < 0) {
-            data[v1] = data[v1] - data[v2];
+            data[v1] = data[v1] + data[v2];
             data[v2] = v1;
         }
         else if (parent(v1) < 0) {
