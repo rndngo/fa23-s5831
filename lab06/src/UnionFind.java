@@ -21,7 +21,7 @@ public class UnionFind {
     /* Returns the size of the set V belongs to. */
     public int sizeOf(int v) {
         // TODO: YOUR CODE HERE
-        return -1 * find(v);
+        return -1 * parent(find(v));
     }
 
     /* Returns the parent of V. If V is the root of a tree, returns the
@@ -37,22 +37,23 @@ public class UnionFind {
     /* Returns true if nodes/vertices V1 and V2 are connected. */
     public boolean connected(int v1, int v2) {
         // TODO: YOUR CODE HERE
-        if (parent(v1) == -1 && parent(v2) == -1) {
-            return false;
-        }
-        if ((parent(v1) < 0 && parent(v2) < 0 && (parent(v1) != parent(v2)))) {
-            return false;
-        }
-        if (parent(v1) == parent(v2)) {
-            return true;
-        }
-        if (parent(v1) < 0) {
-            return connected(v1, parent(v2));
-        }
-        if (parent(v2) < 0) {
-            return connected(parent(v1), v2);
-        }
-        return connected(parent(v1),parent(v2));
+//        if (parent(v1) == -1 && parent(v2) == -1) {
+//            return false;
+//        }
+//        if ((parent(v1) < 0 && parent(v2) < 0 && (parent(v1) != parent(v2)))) {
+//            return false;
+//        }
+//        if (parent(v1) == parent(v2)) {
+//            return true;
+//        }
+//        if (parent(v1) < 0) {
+//            return connected(v1, parent(v2));
+//        }
+//        if (parent(v2) < 0) {
+//            return connected(parent(v1), v2);
+//        }
+//        return connected(parent(v1),parent(v2));
+        return (parent(v1) == parent(v2) && parent(v1) != -1 && parent(v2) != -1 );
     }
 
     /* Returns the root of the set V belongs to. Path-compression is employed
