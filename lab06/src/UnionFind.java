@@ -21,7 +21,9 @@ public class UnionFind {
     /* Returns the size of the set V belongs to. */
     public int sizeOf(int v) {
         // TODO: YOUR CODE HERE
-        return -1 * parent(find(v));
+        if (v < 0)
+            return -1 * v;
+        return sizeOf(parent(v));
     }
 
     /* Returns the parent of V. If V is the root of a tree, returns the
@@ -29,7 +31,7 @@ public class UnionFind {
     public int parent(int v) {
         // TODO: YOUR CODE HERE
         if (v < 0) {
-            return v;
+            return -1 * v;
         }
         return data[v];
     }
@@ -37,9 +39,9 @@ public class UnionFind {
     /* Returns true if nodes/vertices V1 and V2 are connected. */
     public boolean connected(int v1, int v2) {
         // TODO: YOUR CODE HERE
-        return (parent(v1) != -1 && parent(v2) != -1 && (find(v1) == find(v2) || parent(v1) == parent(v2)));
+        return (parent(v1) != -1 && parent(v2) != -1 && parent(v1) == parent(v2));
     }
-
+//(find(v1) == find(v2) ||
     /* Returns the root of the set V belongs to. Path-compression is employed
        allowing for fast search-time. If invalid items are passed into this
        function, throw an IllegalArgumentException. */
@@ -66,17 +68,34 @@ public class UnionFind {
         if (v1 == v2) {
             return;
         }
-        if (connected(v1,v2)) {
-            return;
+        else if (parent(v1) == parent(v2)) {
+            if (sizeOf(parent(v1)) == sizeOf(parent(v2))) {
+                data[v2] = data[v2] + data[v1];
+                data[v1] = v2;
+            }
+            else {
+                data[v1] = data[v1] + data[v2];
+                data[v2] = v1;
+            }
         }
-        if (sizeOf(v1) > sizeOf(v2)) {
-
-            data[find(v1)] = -1 * (sizeOf(v1) + sizeOf(v2));
-            data[find(v2)] = v1;
-        } else {
-
-            data[find(v2)] = -1 * (sizeOf(v1) + sizeOf(v2));
-            data[find(v1)] = v2;
+        else if (parent(v1) < 0 && parent(v2) < 0) {
+            if (sizeOf(parent(v1)) == sizeOf(parent(v2))) {
+                data[v2] = data[v2] + data[v1];
+                data[v1] = v2;
+            }
+            else {
+                data[v1] = data[v1] + data[v2];
+                data[v2] = v1;
+            }
+        }
+        else if (parent(v1) < 0) {
+            union(v1, parent(v2));
+        }
+        else if (parent(v2) < 0) {
+            union(parent(v1), v2);
+        }
+        else {
+            union(parent(v1),parent(v2));
         }
     }
 
