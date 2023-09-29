@@ -56,7 +56,7 @@ public class UnionFind {
         }
         int root = find(parent(v));
         data[v] = root;
-        return parent(v);
+        return root;
     }
 
     /* Connects two items V1 and V2 together by connecting their respective
