@@ -53,7 +53,7 @@ public class UnionFind {
 //            return connected(parent(v1), v2);
 //        }
 //        return connected(parent(v1),parent(v2));
-        return (parent(v1) == parent(v2) && parent(v1) != -1 && parent(v2) != -1 );
+        return (parent(v1) != -1 && parent(v2) != -1 && (find(v1) == find(v2) || parent(v1) == parent(v2)));
     }
 
     /* Returns the root of the set V belongs to. Path-compression is employed
