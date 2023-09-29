@@ -13,16 +13,17 @@ public class UnionFind {
     public UnionFind(int N) {
         // TODO: YOUR CODE HERE
         data = new int[N];
-            for (int i = 0; i < N; i++) {
-                data[i] = -1;
+        for (int i = 0; i < N; i++) {
+            data[i] = -1;
         }
     }
 
     /* Returns the size of the set V belongs to. */
     public int sizeOf(int v) {
         // TODO: YOUR CODE HERE
-        if (v < 0)
+        if (v < 0) {
             return -1 * v;
+        }
         return sizeOf(parent(v));
     }
 
@@ -65,37 +66,30 @@ public class UnionFind {
        already connected should not change the structure. */
     public void union(int v1, int v2) {
         // TODO: YOUR CODE HERE
-        if (v1 == v2) {
-            throw new IllegalArgumentException();
-        }
-        else if (parent(v1) == parent(v2)) {
-            if (sizeOf(parent(v1)) == sizeOf(parent(v2))) {
-                data[v2] = data[v2] + data[v1];
-                data[v1] = v2;
+        if (v1 != v2) {
+            if (parent(v1) == parent(v2)) {
+                if (sizeOf(parent(v1)) == sizeOf(parent(v2))) {
+                    data[v2] = data[v2] + data[v1];
+                    data[v1] = v2;
+                } else {
+                    data[v1] = data[v1] + data[v2];
+                    data[v2] = v1;
+                }
+            } else if (parent(v1) < 0 && parent(v2) < 0) {
+                if (sizeOf(parent(v1)) == sizeOf(parent(v2))) {
+                    data[v2] = data[v2] + data[v1];
+                    data[v1] = v2;
+                } else {
+                    data[v1] = data[v1] + data[v2];
+                    data[v2] = v1;
+                }
+            } else if (parent(v1) < 0) {
+                union(v1, parent(v2));
+            } else if (parent(v2) < 0) {
+                union(parent(v1), v2);
+            } else {
+                union(parent(v1), parent(v2));
             }
-            else {
-                data[v1] = data[v1] + data[v2];
-                data[v2] = v1;
-            }
-        }
-        else if (parent(v1) < 0 && parent(v2) < 0) {
-            if (sizeOf(parent(v1)) == sizeOf(parent(v2))) {
-                data[v2] = data[v2] + data[v1];
-                data[v1] = v2;
-            }
-            else {
-                data[v1] = data[v1] + data[v2];
-                data[v2] = v1;
-            }
-        }
-        else if (parent(v1) < 0) {
-            union(v1, parent(v2));
-        }
-        else if (parent(v2) < 0) {
-            union(parent(v1), v2);
-        }
-        else {
-            union(parent(v1),parent(v2));
         }
     }
 
