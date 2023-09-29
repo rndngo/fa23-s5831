@@ -65,16 +65,18 @@ public class UnionFind {
        already connected should not change the structure. */
     public void union(int v1, int v2) {
         // TODO: YOUR CODE HERE
-        if (!connected(v1,v2)) {
+        if (!connected(v1, v2) && v1 !=v2) {
             if (sizeOf(v1) == sizeOf(v2)) {
                 data[find(v2)] = -1 * (sizeOf(v1) + sizeOf(v2));
                 data[find(v1)] = v2;
-            }
-            else {
+            } else {
                 data[find(v1)] = -1 * (sizeOf(v1) + sizeOf(v2));
                 data[find(v2)] = v1;
             }
+        } else {
+            return;
         }
+    }
 //        if (v1 == v2) {
 //            return;
 //        }
@@ -107,7 +109,7 @@ public class UnionFind {
 //        else {
 //            union(parent(v1),parent(v2));
 //        }
-    }
+
 
     /**
      * DO NOT DELETE OR MODIFY THIS, OTHERWISE THE TESTS WILL NOT PASS.
