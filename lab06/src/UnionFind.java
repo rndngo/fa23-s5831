@@ -31,18 +31,14 @@ public class UnionFind {
        negative size of the tree for which V is the root. */
     public int parent(int v) {
         // TODO: YOUR CODE HERE
-        if (v < 0) {
-            return -1 * v;
-        }
         return data[v];
     }
 
     /* Returns true if nodes/vertices V1 and V2 are connected. */
     public boolean connected(int v1, int v2) {
         // TODO: YOUR CODE HERE
-        return (parent(v1) != -1 && parent(v2) != -1 && parent(v1) == parent(v2));
+        return find(v1) == find(v2);
     }
-    //(find(v1) == find(v2) ||
     /* Returns the root of the set V belongs to. Path-compression is employed
        allowing for fast search-time. If invalid items are passed into this
        function, throw an IllegalArgumentException. */
