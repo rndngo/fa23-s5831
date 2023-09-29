@@ -110,11 +110,13 @@ public class UnionFind {
             return;
         }
         if (sizeOf(v1) > sizeOf(v2)) {
+
+            data[find(v1)] = -1 * (sizeOf(v1) + sizeOf(v2));
             data[find(v2)] = find(v1);
-            data[find(v1)] = parent(find(v1)) + parent(find(v2));
         } else {
+
+            data[find(v2)] = -1 * (sizeOf(v1) + sizeOf(v2));
             data[find(v1)] = find(v2);
-            data[find(v2)] = parent(find(v1)) + parent(find(v2));
         }
 //
     }
