@@ -13,8 +13,8 @@ public class UnionFind {
     public UnionFind(int N) {
         // TODO: YOUR CODE HERE
         data = new int[N];
-        for (int i = 0; i < N; i++) {
-            data[i] = -1;
+            for (int i = 0; i < N; i++) {
+                data[i] = -1;
         }
     }
 
@@ -106,23 +106,17 @@ public class UnionFind {
         if (v1 == v2) {
             return;
         }
-        else if (parent(v1) == parent(v2)) {
-            data[v2] = data[v2] + data[v1];
-            data[v1] = v2;
+        if (connected(v1,v2)) {
+            return;
         }
-        else if (parent(v1) < 0 && parent(v2) < 0) {
-            data[v1] = data[v1] + data[v2];
-            data[v2] = v1;
+        if (sizeOf(v1) > sizeOf(v2)) {
+            data[find(v2)] = find(v1);
+            data[find(v1)] = parent(find(v1)) + parent(find(v2));
+        } else {
+            data[find(v1)] = find(v2);
+            data[find(v2)] = parent(find(v1)) + parent(find(v2));
         }
-        else if (parent(v1) < 0) {
-             union(v1, parent(v2));
-        }
-        else if (parent(v2) < 0) {
-             union(parent(v1), v2);
-        }
-        else {
-            union(parent(v1),parent(v2));
-        }
+//
     }
 
     /**
