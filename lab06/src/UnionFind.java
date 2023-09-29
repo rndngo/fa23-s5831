@@ -37,22 +37,6 @@ public class UnionFind {
     /* Returns true if nodes/vertices V1 and V2 are connected. */
     public boolean connected(int v1, int v2) {
         // TODO: YOUR CODE HERE
-//        if (parent(v1) == -1 && parent(v2) == -1) {
-//            return false;
-//        }
-//        if ((parent(v1) < 0 && parent(v2) < 0 && (parent(v1) != parent(v2)))) {
-//            return false;
-//        }
-//        if (parent(v1) == parent(v2)) {
-//            return true;
-//        }
-//        if (parent(v1) < 0) {
-//            return connected(v1, parent(v2));
-//        }
-//        if (parent(v2) < 0) {
-//            return connected(parent(v1), v2);
-//        }
-//        return connected(parent(v1),parent(v2));
         return (parent(v1) != -1 && parent(v2) != -1 && (find(v1) == find(v2) || parent(v1) == parent(v2)));
     }
 
@@ -70,30 +54,6 @@ public class UnionFind {
         int root = find(parent(v));
         data[v] = root;
         return parent(v);
-
-
-//        int c = 0;
-//        int[] b = new int[999];
-//        while (parent(v) > 0) {
-//
-//            b[c] = v;
-//            c ++;
-//            int[] b2 = new int[c+1];
-//            for (int i = 0; i < b.length; i ++) {
-//                b2[i] = b[i];
-//            }
-//            b = b2;
-//
-//        }
-//        for (int i = 0; i < b.length; i ++) {
-//            data[b[i]] = v;
-//        }
-//        return v
-
-//        if (parent(v) < 0) {
-//            return v;
-//        }
-//        return parent(v);
     }
 
     /* Connects two items V1 and V2 together by connecting their respective
@@ -112,13 +72,12 @@ public class UnionFind {
         if (sizeOf(v1) > sizeOf(v2)) {
 
             data[find(v1)] = -1 * (sizeOf(v1) + sizeOf(v2));
-            data[find(v2)] = find(v1);
+            data[find(v2)] = v1;
         } else {
 
             data[find(v2)] = -1 * (sizeOf(v1) + sizeOf(v2));
-            data[find(v1)] = find(v2);
+            data[find(v1)] = v2;
         }
-//
     }
 
     /**
