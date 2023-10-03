@@ -16,18 +16,12 @@ public class Percolation {
     public Percolation(int N) {
         // TODO: Fill in this constructor.
         dimension = N;
-        percolating = false;
+        this.percolating = false;
         grid = new boolean[N][N];
         GToU = new WeightedQuickUnionUF(N * N * 2);
-        for (int x = 0; x < N; x ++) {
-            for (int y = 0; y < N; y ++) {
-                grid[x][y] = false;
-            }
-        }
-        water = N*N+1;
-        GToU.union(water,water+1);
-        for (int i = 1;i < 24; i ++) {
-            GToU.union(water+i,water);
+        water = N*N;
+        for (int i = 0;i < N*N-1; i ++) {
+            GToU.union(water,water+i);
         }
 
     }
@@ -75,12 +69,12 @@ public class Percolation {
             }
         } else if (row > dimension) {
             if (isFull(orow,col)) {
-                percolating = true;
+                this.percolating = true;
             }
         }
     }
     private int convertGTU(int row, int col) {
-        return (row*5)+col;
+        return (row*dimension)+col;
     }
     private boolean checkbounds(int row, int col) {
         return (0 <= row && row < dimension) && (0 <= col && col < dimension);
@@ -132,14 +126,14 @@ public class Percolation {
         // TODO: Fill in this method.
         int x = dimension-1;
         if (x < 0) {
-            return percolating;
+            return this.percolating;
         }
         for (int i = 0; i < dimension; i++) {
             if (isFull(dimension-1,i)){
                 return true;
             }
         }
-        return percolating;
+        return this.percolating;
     }
 
     // TODO: Add any useful helper methods (we highly recommend this!).

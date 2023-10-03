@@ -54,5 +54,23 @@ public class PercolationTest {
         assertThat(p.numberOfOpenSites()).isEqualTo(25);
         assertThat(p.percolates()).isTrue();
     }
+    @Test
+    public void N12() {
+        int N = 1;
+        Percolation p = new Percolation(1);
+        assertThat(p.percolates()).isFalse();
+        p.open(0,0);
+        assertThat(p.percolates()).isTrue();
+        N = 2;
+        p = new Percolation(2);
+        assertThat(p.isFull(1,1)).isFalse();
+        p.open(0,0);
+        p.open(1,1);
+        assertThat(p.percolates()).isFalse();
+        p.open(1,0);
+        assertThat(p.percolates()).isTrue();
+        assertThat(p.isFull(0,1)).isFalse();
+        assertThat(p.isOpen(0,1)).isFalse();
+    }
 
 }
