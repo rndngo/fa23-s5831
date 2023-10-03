@@ -10,6 +10,9 @@ public class Percolation {
     // use % to get a row and column.
 
     public Percolation(int N) {
+        if (N <= 0) {
+            throw new IllegalArgumentException("N is less than 0");
+        }
         dimension = N;
         this.percolating = false;
         grid = new boolean[N][N];
@@ -72,11 +75,7 @@ public class Percolation {
         return (row * dimension) + col;
     }
     private boolean checkbounds(int row, int col) {
-        if (!(0 <= row && row < dimension) && (0 <= col && col < dimension)) {
-            throw new IllegalArgumentException();
-        } else {
-            return true;
-        }
+        return (0 <= row && row < dimension) && (0 <= col && col < dimension);
     }
 
     public void open(int row, int col) {

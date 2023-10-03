@@ -73,4 +73,10 @@ public class PercolationTest {
         assertThat(p.isOpen(0,1)).isFalse();
     }
 
+    @Test
+    public void Nisnegative() {
+        int N = -100;
+        Percolation p = new Percolation(N);
+    }
+
 }
