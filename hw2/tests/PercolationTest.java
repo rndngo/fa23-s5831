@@ -38,11 +38,20 @@ public class PercolationTest {
         }
         assertThat(getState(N, p)).isEqualTo(expectedState);
         assertThat(p.percolates()).isFalse();
+        assertThat(p.numberOfOpenSites()).isEqualTo(6);
     }
 
     @Test
     public void yourTestHere() {
         // TODO: write some more tests
+        int N = 5;
+        Percolation p = new Percolation(5);
+        for (int x = 0; x < N; x++) {
+            for (int y = 0; y < N; y++) {
+                p.open(x,y);
+            }
+        }
+        assertThat(p.numberOfOpenSites()).isEqualTo(25);
     }
 
 }

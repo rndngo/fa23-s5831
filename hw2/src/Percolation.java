@@ -24,7 +24,7 @@ public class Percolation {
                 grid[x][y] = false;
             }
         }
-        water = 25;
+        water = N*N+1;
         GToU.union(water,water+1);
         for (int i = 1;i < 24; i ++) {
             GToU.union(water+i,water);
