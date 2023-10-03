@@ -130,6 +130,15 @@ public class Percolation {
 
     public boolean percolates() {
         // TODO: Fill in this method.
+        int x = dimension-1;
+        if (x < 0) {
+            return percolating;
+        }
+        for (int i = 0; i < dimension; i++) {
+            if (isFull(dimension-1,i)){
+                return true;
+            }
+        }
         return percolating;
     }
 

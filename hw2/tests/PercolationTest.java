@@ -52,6 +52,7 @@ public class PercolationTest {
             }
         }
         assertThat(p.numberOfOpenSites()).isEqualTo(25);
+        assertThat(p.percolates()).isTrue();
     }
 
 }
