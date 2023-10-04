@@ -54,6 +54,35 @@ public class PercolationTest {
         assertThat(p.numberOfOpenSites()).isEqualTo(25);
         assertThat(p.percolates()).isTrue();
     }
+
+    @Test
+    public void input6test() {
+        int N = 5;
+        Percolation p = new Percolation(5);
+        int[][] openSites = {
+                {0, 1},
+                {2, 0},
+                {3, 1},
+                {4, 1},
+                {1, 0},
+                {1, 1}
+        };
+        int[][] expectedState = {
+                {0, 3, 0, 0, 0},
+                {3, 3, 0, 0, 0},
+                {3, 0, 0, 0, 0},
+                {0, 1, 0, 0, 0},
+                {0, 1, 0, 0, 0}
+        };
+        for (int[] site : openSites) {
+            p.open(site[0], site[1]);
+        }
+        assertThat(getState(N, p)).isEqualTo(expectedState);
+        assertThat(p.percolates()).isFalse();
+        assertThat(p.numberOfOpenSites()).isEqualTo(6);
+    }
+
+
     @Test
     public void N12() {
         int N = 1;

@@ -17,7 +17,6 @@ public class Percolation {
         }
         dimension = N;
         opened = 0;
-        percolating = false;
         grid = new boolean[N][N];
         GToU = new WeightedQuickUnionUF(N * N + 2);
         water = N * N;
@@ -30,59 +29,12 @@ public class Percolation {
     But what if row is the last row aka 4 if it's a dimension 5.
     4 * 5 + col = 20 + col. Thus, if col = 0 we get item at index 20 as it goes from 0 - dimension squared.
      */
-    private void checkAdjacentItems(int row, int col) {
-        for (int i = -1; i < 2; i += 2) {
-            checkForRows(row + i, col, row);
-            checkForCols(row, col + i, col);
-        }
-
-    }
-    private void checkForCols(int row, int col, int ocol) {
-        int center = convertGTU(row, ocol);
-        if (validBounds(row, col)) {
-            int x = convertGTU(row, col);
-            if (isFull(row, col) && !isFull(row, ocol)) {
-                GToU.union(water, center);
-            } else if (isOpen(row, col) && isFull(row, ocol)) {
-                GToU.union(water, x);
-            } else if (isOpen(row, col)) {
-                GToU.union(x, center);
-            }
-        }
-    }
-    private void checkForRows(int row, int col, int orow) {
-        int center = convertGTU(orow, col);
-        if (validBounds(row, col)) {
-            int x = convertGTU(row, col);
-            if (isFull(row, col) && !isFull(orow, col)) {
-                GToU.union(water, center);
-            } else if (isOpen(row, col) && isFull(orow, col)) {
-                GToU.union(water, x);
-            } else if (isOpen(row, col)) {
-                GToU.union(x, center);
-            }
-        } else if (row < 0) {
-            if (!isFull(orow, col)) {
-                GToU.union(water, center);
-            }
-        } else if (row >= dimension) {
-            if (isFull(orow, col)) {
-                this.percolating = true;
-            }
-        }
-    }
     private int convertGTU(int row, int col) {
         return (row * dimension) + col;
     }
     private boolean validBounds(int row, int col) {
         return (0 <= row && row < dimension) && (0 <= col && col < dimension);
     }
-
-
-
-
-
-
 
     public void open(int row, int col) {
         if (!validBounds(row, col)) {
@@ -108,8 +60,8 @@ public class Percolation {
             if (otherRow < 0) { // we are touching water
                 GToU.union(water, center);
             }
-            if (otherRow >= dimension && isFull(row, col)) { // we are touching the bottom
-                percolating = true;
+            if (otherRow >= dimension && !percolates()) { // we are touching the bottom
+                GToU.union(center, bottom);
             }
 
             //TODO the below line may cause errors if it does, change to a nested for loop
@@ -119,7 +71,6 @@ public class Percolation {
             }
         }
 
-        // checkAdjacentItems(row, col);
     }
 
     public boolean isOpen(int row, int col) {
@@ -156,6 +107,6 @@ public class Percolation {
 //        }
 //        return this.percolating;
 //    }
-        return percolating;
+        return GToU.connected(bottom, water);
     }
 }
