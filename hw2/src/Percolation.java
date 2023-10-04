@@ -3,6 +3,7 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 public class Percolation {
     private final int dimension;
     private boolean[][] grid;
+    private int opened;
     private WeightedQuickUnionUF GToU;
     private final int water;
     private final int bottom;
@@ -15,6 +16,7 @@ public class Percolation {
             throw new IllegalArgumentException("N is less than 0");
         }
         dimension = N;
+        opened = 0;
         this.percolating = false;
         grid = new boolean[N][N];
         GToU = new WeightedQuickUnionUF(N * N + 2);
@@ -63,7 +65,7 @@ public class Percolation {
             if (!isFull(orow, col)) {
                 GToU.union(water, center);
             }
-        } else if (row > dimension) {
+        } else if (row >= dimension) {
             if (isFull(orow, col)) {
                 this.percolating = true;
             }
@@ -79,6 +81,7 @@ public class Percolation {
     public void open(int row, int col) {
         if (checkbounds(row, col)) {
             grid[row][col] = true;
+            opened++;
             checkadjacentitems(row, col);
         }
     }
@@ -101,15 +104,7 @@ public class Percolation {
     }
 
     public int numberOfOpenSites() {
-        int c = 0;
-        for (int x = 0; x < dimension; x++) {
-            for (int y = 0; y < dimension; y++) {
-                if (grid[x][y]) {
-                    c++;
-                }
-            }
-        }
-        return c;
+        return opened;
     }
 
     public boolean percolates() {
@@ -124,6 +119,6 @@ public class Percolation {
 //        }
 //        return this.percolating;
 //    }
-        return GToU.connected(water, bottom);
+        return percolating;
     }
 }
