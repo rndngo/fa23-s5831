@@ -5,6 +5,7 @@ public class Percolation {
     private boolean[][] grid;
     private WeightedQuickUnionUF GToU;
     private final int water;
+    private final int bottom;
     private boolean percolating;
 
     // use % to get a row and column.
@@ -16,12 +17,9 @@ public class Percolation {
         dimension = N;
         this.percolating = false;
         grid = new boolean[N][N];
-        GToU = new WeightedQuickUnionUF(N * N * 2);
+        GToU = new WeightedQuickUnionUF(N * N + 2);
         water = N * N;
-        for (int i = 0; i < N * N - 1; i++) {
-            GToU.union(water, water + i);
-        }
-
+        bottom = water +1;
     }
     /*
     if row = 1 and col = 3 thus saying (1,3),
@@ -115,15 +113,17 @@ public class Percolation {
     }
 
     public boolean percolates() {
-        int x = dimension - 1;
-        if (x < 0) {
-            return this.percolating;
-        }
-        for (int i = 0; i < dimension; i++) {
-            if (isFull(dimension - 1, i)) {
-                return true;
-            }
-        }
-        return this.percolating;
+//        int x = dimension - 1;
+//        if (x < 0) {
+//            return this.percolating;
+//        }
+//        for (int i = 0; i < dimension; i++) {
+//            if (isFull(dimension - 1, i)) {
+//                return true;
+//            }
+//        }
+//        return this.percolating;
+//    }
+        return GToU.connected(water, bottom);
     }
 }
