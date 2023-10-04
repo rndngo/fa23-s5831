@@ -30,16 +30,16 @@ public class Percolation {
     But what if row is the last row aka 4 if it's a dimension 5.
     4 * 5 + col = 20 + col. Thus if col = 0 we get item at index 20 as it goes from 0 - dimension squared.
      */
-    private void checkadjacentitems(int row, int col) {
+    private void checkAdjacentItems(int row, int col) {
         for (int i = -1; i < 2; i += 2) {
-            checkforrows(row + i, col, row);
-            checkforcols(row, col + i, col);
+            checkForRows(row + i, col, row);
+            checkForCols(row, col + i, col);
         }
 
     }
-    private void checkforcols(int row, int col, int ocol) {
+    private void checkForCols(int row, int col, int ocol) {
         int center = convertGTU(row, ocol);
-        if (checkbounds(row, col)) {
+        if (checkBounds(row, col)) {
             int x = convertGTU(row, col);
             if (isFull(row, col) && !isFull(row, ocol)) {
                 GToU.union(water, center);
@@ -50,9 +50,9 @@ public class Percolation {
             }
         }
     }
-    private void checkforrows(int row, int col,  int orow) {
+    private void checkForRows(int row, int col, int orow) {
         int center = convertGTU(orow, col);
-        if (checkbounds(row, col)) {
+        if (checkBounds(row, col)) {
             int x = convertGTU(row, col);
             if (isFull(row, col) && !isFull(orow, col)) {
                 GToU.union(water, center);
@@ -74,32 +74,34 @@ public class Percolation {
     private int convertGTU(int row, int col) {
         return (row * dimension) + col;
     }
-    private boolean checkbounds(int row, int col) {
+    private boolean checkBounds(int row, int col) {
         return (0 <= row && row < dimension) && (0 <= col && col < dimension);
     }
 
     public void open(int row, int col) {
-        if (checkbounds(row, col)) {
+        if (checkBounds(row, col)) {
             grid[row][col] = true;
             opened++;
-            checkadjacentitems(row, col);
+            checkAdjacentItems(row, col);
+        } else {
+            throw new IllegalArgumentException();
         }
     }
 
     public boolean isOpen(int row, int col) {
-        if (checkbounds(row, col)) {
+        if (checkBounds(row, col)) {
             return grid[row][col]; //returns the boolean value.
         } else {
-            return false;
+            throw new IllegalArgumentException();
         }
     }
 
     public boolean isFull(int row, int col) {
-        if (checkbounds(row, col)) {
+        if (checkBounds(row, col)) {
             int x = convertGTU(row, col);
             return GToU.connected(x, water); // checks if the coordinate is connected to water.
         } else {
-            return false;
+            throw new IllegalArgumentException();
         }
     }
 
