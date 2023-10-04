@@ -21,7 +21,7 @@ public class Percolation {
         grid = new boolean[N][N];
         GToU = new WeightedQuickUnionUF(N * N + 2);
         water = N * N;
-        bottom = water +1;
+        bottom = water + 1;
     }
     /*
     if row = 1 and col = 3 thus saying (1,3),
