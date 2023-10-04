@@ -40,7 +40,7 @@ public class Percolation {
 
     public void open(int row, int col) {
         if (!validBounds(row, col)) {
-            throw new IllegalArgumentException();
+            throw new IndexOutOfBoundsException();
         }
 
         if (isOpen(row, col)) {
@@ -56,7 +56,7 @@ public class Percolation {
         // Do not mess with this order! last item must be last, we must check bottom last
         Object[][] xyOffsets = {{0, -1}, {0, 1}, {-1, 0}, {1, 0}};
 
-        for(Object[] xyOffset : xyOffsets) {
+        for (Object[] xyOffset : xyOffsets) {
             int otherRow = row + (int) xyOffset[0];
             int otherCol = col + (int) xyOffset[1];
             if (otherRow < 0) { // we are touching water
@@ -67,10 +67,9 @@ public class Percolation {
                 GToU.union(center, bottom);
             }
 
-            //TODO the below line may cause errors if it does, change to a nested for loop
             if (validBounds(otherRow, otherCol) && isOpen(otherRow, otherCol)) {
                 int x = convertGTU(otherRow, otherCol);
-                GToU.union(x , center);
+                GToU.union(x, center);
                 isFullUnion.union(x, center);
             }
         }
@@ -79,7 +78,7 @@ public class Percolation {
 
     public boolean isOpen(int row, int col) {
         if (!validBounds(row, col)) {
-            throw new IllegalArgumentException();
+            throw new IndexOutOfBoundsException();
         }
 
         return grid[row][col]; //returns the boolean value.
@@ -88,7 +87,7 @@ public class Percolation {
 
     public boolean isFull(int row, int col) {
         if (!validBounds(row, col)) {
-            throw new IllegalArgumentException();
+            throw new IndexOutOfBoundsException();
         }
 
         int x = convertGTU(row, col);
@@ -100,17 +99,6 @@ public class Percolation {
     }
 
     public boolean percolates() {
-//        int x = dimension - 1;
-//        if (x < 0) {
-//            return this.percolating;
-//        }
-//        for (int i = 0; i < dimension; i++) {
-//            if (isFull(dimension - 1, i)) {
-//                return true;
-//            }
-//        }
-//        return this.percolating;
-//    }
         return GToU.connected(bottom, water);
     }
 }
