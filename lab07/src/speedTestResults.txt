@@ -1,0 +1,2 @@
+The more items being inserted, ULLMap struggles with inserting it at a fast time. Where as BSTMap is near instant.
+This may be due to the effeieceny of BSTMap as it goes from check a specifc thing, whereas ULLMap does every item and adding it to a leaf.
