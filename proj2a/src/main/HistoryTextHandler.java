@@ -5,14 +5,12 @@ import browser.NgordnetQueryHandler;
 import ngrams.NGramMap;
 import ngrams.TimeSeries;
 
-import java.sql.Time;
 import java.util.List;
-import java.util.TreeMap;
 
 public class HistoryTextHandler extends NgordnetQueryHandler {
-    public NGramMap ListofMaps;
+    private NGramMap listofMaps;
     public HistoryTextHandler(NGramMap map) {
-        ListofMaps = map;
+        listofMaps = map;
     }
     @Override
     public String handle(NgordnetQuery q) {
@@ -21,17 +19,17 @@ public class HistoryTextHandler extends NgordnetQueryHandler {
         int endYear = q.endYear();
         String response = "";
         for (String w : words) {
-            TimeSeries Weighed =  ListofMaps.weightHistory(w,startYear,endYear);
-            response += w + ": {";
-            if (Weighed.containsKey(startYear)) {
-                response += startYear + "=" + Weighed.get(startYear) + ", " ;
+            TimeSeries weight =  listofMaps.weightHistory(w, startYear, endYear);
+            response += weight + ": {";
+            if (weight.containsKey(startYear)) {
+                response += startYear + "=" + weight.get(startYear) + ", ";
             }
             for (int year = startYear + 1; year <= endYear; year++) {
-                if (Weighed.containsKey(year)) {
-                    response +=  year + "=" + Weighed.get(year) + ", ";
+                if (weight.containsKey(year)) {
+                    response +=  year + "=" + weight.get(year) + ", ";
                 }
             }
-            response = response.substring(0,response.length()-2);
+            response = response.substring(0, response.length() - 2);
             response += "}" + "\n";
         }
         return response;

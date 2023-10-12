@@ -11,9 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HistoryHandler extends NgordnetQueryHandler {
-    public NGramMap ListofMaps;
+    private NGramMap listofMaps;
     public HistoryHandler(NGramMap map) {
-        ListofMaps = map;
+        listofMaps = map;
     }
     @Override
     public String handle(NgordnetQuery q) {
@@ -26,7 +26,7 @@ public class HistoryHandler extends NgordnetQueryHandler {
 
         for (String w : words) {
             labels.add(w);
-            lts.add(ListofMaps.weightHistory(w));
+            lts.add(listofMaps.weightHistory(w, startYear, endYear));
         }
 
 

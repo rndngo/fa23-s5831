@@ -1,10 +1,7 @@
 package ngrams;
 
 import edu.princeton.cs.algs4.In;
-import net.sf.saxon.functions.Minimax;
 
-import javax.print.attribute.standard.MediaSize;
-import java.sql.Time;
 import java.util.*;
 
 /**
@@ -19,33 +16,20 @@ import java.util.*;
  */
 public class NGramMap {
 
-    // TODO: Add any necessary static/instance variables.
-//    public TimeSeries ListofWordswithYears;
-//    public TimeSeries ListofYearswithWordcounts;
-//    public TimeSeries ListofYearswithTotalWords;
-//    public HashMap<Double,TimeSeries> HashStorageforTimeSeries;
-//    public HashMap<Double,String> HashStorage;
 
-    /*
-     * Need to make a List that is able to hold multiple TimeSeries. Something like an Array List or have a Root branch
-     * towards multiple branches. Timeseries consists of Year and Word Data, meaning it can fit right in.
-     * We make a list named after the word so we can call it, but we use HastCode to make it easier.
-     * We could use Set to make it as each year is unique per word.
-     */
 
-    public TreeMap<String, TimeSeries> WordStorage;
-    public TimeSeries yearsWithCounts;
-    public int MinYear;
-    public int MaxYear;
+    private TreeMap<String, TimeSeries> wordStorage;
+    private TimeSeries yearsWithCounts;
+    private int minYear;
+    private int maxYear;
     /**
      * Constructs an NGramMap from WORDSFILENAME and COUNTSFILENAME.
      */
     public NGramMap(String wordsFilename, String countsFilename) {
-        // TODO: Fill in this constructor. See the "NGramMap Tips" section of the spec for help.
         In wordFile = new In(wordsFilename); // Does file things (Gets items of file)
-        MinYear = TimeSeries.MIN_YEAR;
-        MaxYear = TimeSeries.MAX_YEAR;
-        WordStorage = new TreeMap<>();
+        minYear = TimeSeries.MIN_YEAR;
+        maxYear = TimeSeries.MAX_YEAR;
+        wordStorage = new TreeMap<>();
         while (wordFile.hasNextLine()) {
             String nextLine = wordFile.readLine(); // Gets data
             String[] splitLine = nextLine.split("\t"); // Converts data to callable items
@@ -55,10 +39,10 @@ public class NGramMap {
             double count = Double.parseDouble(splitLine[2]);
 
             // make sure there is a mapping between word and timeseries
-            if (!WordStorage.containsKey(word)) { // Checks if word doesn't exist and adds it with new word.
-                WordStorage.put(word, new TimeSeries());
+            if (!wordStorage.containsKey(word)) { // Checks if word doesn't exist and adds it with new word.
+                wordStorage.put(word, new TimeSeries());
             }
-            WordStorage.get(word).put(year, count);
+            wordStorage.get(word).put(year, count);
         }
         wordFile.close();
 
@@ -84,18 +68,17 @@ public class NGramMap {
      * returns an empty TimeSeries.
      */
     public TimeSeries countHistory(String word, int startYear, int endYear) {
-        // TODO: Fill in this method.
-        if (!WordStorage.containsKey(word)) {
+        if (!wordStorage.containsKey(word)) {
             return new TimeSeries();
         }
-        TimeSeries DifL = WordStorage.get(word);
-        TimeSeries Result = new TimeSeries();
-        for (int year = startYear; year <= endYear; year ++) {
-            if (DifL.containsKey(year)) {
-                Result.put(year, DifL.get(year));
+        TimeSeries difL = wordStorage.get(word);
+        TimeSeries result = new TimeSeries();
+        for (int year = startYear; year <= endYear; year++) {
+            if (difL.containsKey(year)) {
+                result.put(year, difL.get(year));
             }
         }
-        return Result;
+        return result;
     }
 
     /**
@@ -105,16 +88,14 @@ public class NGramMap {
      * is not in the data files, returns an empty TimeSeries.
      */
     public TimeSeries countHistory(String word) {
-        // TODO: Fill in this method.
 
-        return countHistory(word,MinYear,MaxYear);
+        return countHistory(word, minYear, maxYear);
     }
 
     /**
      * Returns a defensive copy of the total number of words recorded per year in all volumes.
      */
     public TimeSeries totalCountHistory() {
-        // TODO: Fill in this method.
         return (TimeSeries) yearsWithCounts.clone();
 
     }
@@ -125,34 +106,18 @@ public class NGramMap {
      * TimeSeries.
      */
     public TimeSeries weightHistory(String word, int startYear, int endYear) {
-        // TODO: Fill in this method.
-        if (!WordStorage.containsKey(word)) {
+        if (!wordStorage.containsKey(word)) {
             return new TimeSeries();
         }
 
-        TimeSeries Result = new TimeSeries();
-        TimeSeries DifL = WordStorage.get(word);
-        for (int year = startYear; year <= endYear; year ++) {
-            if (DifL.containsKey(year) && yearsWithCounts.containsKey(year)) {
-                Result.put(year, DifL.get(year) / yearsWithCounts.get(year));
+        TimeSeries r = new TimeSeries();
+        TimeSeries d = wordStorage.get(word);
+        for (int year = startYear; year <= endYear; year++) {
+            if (d.containsKey(year) && yearsWithCounts.containsKey(year)) {
+                r.put(year, d.get(year) / yearsWithCounts.get(year));
             }
         }
-//
-//        double total = 0.0;
-//
-//        TimeSeries DifL = WordStorage.get(word);
-//        for (int year = MinYear; year <= MaxYear; year ++ ) {
-//            if (DifL.containsKey(year)) {
-//                total += DifL.get(year);
-//            }
-//        }
-//        for (int year = startYear; year <= endYear; year ++ ) {
-//            if (DifL.containsKey(year)) {
-//                double rate = DifL.get(year);
-//                Result.put(year, rate / total);
-//            }
-//        }
-        return Result;
+        return r;
     }
 
     /**
@@ -161,9 +126,8 @@ public class NGramMap {
      * TimeSeries.
      */
     public TimeSeries weightHistory(String word) {
-        // TODO: Fill in this method.
 
-        return weightHistory(word,MinYear,MaxYear);
+        return weightHistory(word, minYear, maxYear);
     }
 
     /**
@@ -172,29 +136,16 @@ public class NGramMap {
      * rather than throwing an exception.
      */
     public TimeSeries summedWeightHistory(Collection<String> words, int startYear, int endYear) {
-        // TODO: Fill in this method.
         double summed = 0.0;
-        TimeSeries Result = new TimeSeries();
-        for (String w : words) {
-            if (!WordStorage.containsKey(w)) {
-                return new TimeSeries();
+        TimeSeries r = new TimeSeries();
+        for (String word : words) {
+            if (!wordStorage.containsKey(word)) {
+                continue;
             }
 
-            TimeSeries Other = new TimeSeries();
-            TimeSeries DifL = WordStorage.get(w);
-            for (int year = startYear; year <= endYear; year++) {
-                if (DifL.containsKey(year) && yearsWithCounts.containsKey(year)) {
-                    if (Result.containsKey(year)) {
-                        Other.put(year, DifL.get(year) / yearsWithCounts.get(year));
-                        Result.plus(Other);
-                        Other.clear();
-                    } else {
-                        Result.put(year, DifL.get(year) / yearsWithCounts.get(year));
-                    }
-                }
-            }
+            r = r.plus(weightHistory(word, startYear, endYear));
         }
-        return Result;
+        return r;
     }
 
     /**
@@ -202,11 +153,8 @@ public class NGramMap {
      * exist in this time frame, ignore it rather than throwing an exception.
      */
     public TimeSeries summedWeightHistory(Collection<String> words) {
-        // TODO: Fill in this method.
 
-        return summedWeightHistory(words, MinYear, MaxYear);
+        return summedWeightHistory(words, minYear, maxYear);
     }
 
-    // TODO: Add any private helper methods.
-    // TODO: Remove all TODO comments before submitting.
 }
