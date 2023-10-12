@@ -20,7 +20,7 @@ public class HistoryTextHandler extends NgordnetQueryHandler {
         String response = "";
         for (String w : words) {
             TimeSeries weight =  listofMaps.weightHistory(w, startYear, endYear);
-            response += weight + ": {";
+            response += w + ": {";
             if (weight.containsKey(startYear)) {
                 response += startYear + "=" + weight.get(startYear) + ", ";
             }
