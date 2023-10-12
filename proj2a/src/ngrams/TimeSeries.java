@@ -1,7 +1,10 @@
 package ngrams;
 
-import java.util.List;
-import java.util.TreeMap;
+import com.sun.source.tree.CaseTree;
+import edu.princeton.cs.algs4.In;
+
+import java.sql.Time;
+import java.util.*;
 
 /**
  * An object for mapping a year number (e.g. 1996) to numerical data. Provides
@@ -28,6 +31,12 @@ public class TimeSeries extends TreeMap<Integer, Double> {
     public TimeSeries(TimeSeries ts, int startYear, int endYear) {
         super();
         // TODO: Fill in this constructor.
+        this.clear();
+        for (int year = startYear; year <= endYear; year ++) {
+            if (ts.containsKey(year)) {
+                this.put(year,ts.get(year));
+            }
+        }
     }
 
     /**
@@ -35,7 +44,13 @@ public class TimeSeries extends TreeMap<Integer, Double> {
      */
     public List<Integer> years() {
         // TODO: Fill in this method.
-        return null;
+        List<Integer> List = new ArrayList<>();
+        Set<Integer> Years = this.keySet();
+        for (Integer x : Years) {
+            List.add(x);
+        }
+
+        return List.stream().toList();
     }
 
     /**
@@ -44,7 +59,15 @@ public class TimeSeries extends TreeMap<Integer, Double> {
      */
     public List<Double> data() {
         // TODO: Fill in this method.
-        return null;
+        Collection<Double> ListofYears = values();
+        Double[] ListYears = new Double[this.size()];
+        int c = 0;
+        for (Double x : ListofYears) {
+            ListYears[c] = x;
+            c += 1;
+        }
+
+        return List.of(ListYears);
     }
 
     /**
@@ -58,7 +81,20 @@ public class TimeSeries extends TreeMap<Integer, Double> {
      */
     public TimeSeries plus(TimeSeries ts) {
         // TODO: Fill in this method.
-        return null;
+        TimeSeries LY1 = this;
+        Set<Integer> LY3 = ts.keySet();
+        if (this.size() == 0 && ts.size() == 0) {
+            return ts;
+        }
+        for (Integer x : LY3) {
+            if (LY1.containsKey(x)) {
+                Double newValue = ts.get(x) + LY1.get(x);
+                LY1.replace(x, newValue);
+            } else {
+                LY1.put(x, ts.get(x));
+            }
+        }
+        return LY1;
     }
 
     /**
@@ -72,7 +108,19 @@ public class TimeSeries extends TreeMap<Integer, Double> {
      */
     public TimeSeries dividedBy(TimeSeries ts) {
         // TODO: Fill in this method.
-        return null;
+        TimeSeries LY1 = this;
+        Set<Integer> LY2 = this.keySet();
+
+        for (Integer x : LY2) {
+            if (!ts.containsKey(x)) {
+                throw new IllegalArgumentException();
+            }
+            Double newValue = LY1.get(x) / ts.get(x);
+            LY1.replace(x, newValue);
+        }
+
+
+        return LY1;
     }
 
     // TODO: Add any private helper methods.
