@@ -15,13 +15,10 @@ import java.util.*;
  * @author Josh Hug
  */
 public class NGramMap {
-
-
-
-    private TreeMap<String, TimeSeries> wordStorage;
-    private TimeSeries yearsWithCounts;
-    private int minYear;
-    private int maxYear;
+    private final TreeMap<String, TimeSeries> wordStorage;
+    private final TimeSeries yearsWithCounts;
+    private final int minYear;
+    private final int maxYear;
     /**
      * Constructs an NGramMap from WORDSFILENAME and COUNTSFILENAME.
      */
@@ -88,7 +85,6 @@ public class NGramMap {
      * is not in the data files, returns an empty TimeSeries.
      */
     public TimeSeries countHistory(String word) {
-
         return countHistory(word, minYear, maxYear);
     }
 
@@ -97,7 +93,6 @@ public class NGramMap {
      */
     public TimeSeries totalCountHistory() {
         return (TimeSeries) yearsWithCounts.clone();
-
     }
 
     /**
@@ -109,15 +104,14 @@ public class NGramMap {
         if (!wordStorage.containsKey(word)) {
             return new TimeSeries();
         }
-
-        TimeSeries r = new TimeSeries();
-        TimeSeries d = wordStorage.get(word);
+        TimeSeries result = new TimeSeries();
+        TimeSeries wordTs = wordStorage.get(word);
         for (int year = startYear; year <= endYear; year++) {
-            if (d.containsKey(year) && yearsWithCounts.containsKey(year)) {
-                r.put(year, d.get(year) / yearsWithCounts.get(year));
+            if (wordTs.containsKey(year) && yearsWithCounts.containsKey(year)) {
+                result.put(year, wordTs.get(year) / yearsWithCounts.get(year));
             }
         }
-        return r;
+        return result;
     }
 
     /**
@@ -126,7 +120,6 @@ public class NGramMap {
      * TimeSeries.
      */
     public TimeSeries weightHistory(String word) {
-
         return weightHistory(word, minYear, maxYear);
     }
 
@@ -142,7 +135,6 @@ public class NGramMap {
             if (!wordStorage.containsKey(word)) {
                 continue;
             }
-
             r = r.plus(weightHistory(word, startYear, endYear));
         }
         return r;
@@ -153,7 +145,6 @@ public class NGramMap {
      * exist in this time frame, ignore it rather than throwing an exception.
      */
     public TimeSeries summedWeightHistory(Collection<String> words) {
-
         return summedWeightHistory(words, minYear, maxYear);
     }
 
