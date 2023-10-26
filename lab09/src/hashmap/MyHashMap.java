@@ -1,6 +1,6 @@
 package hashmap;
 
-import java.util.Collection;
+import java.util.*;
 
 /**
  *  A hash table-backed Map implementation.
@@ -9,6 +9,96 @@ import java.util.Collection;
  *  @author YOUR NAME HERE
  */
 public class MyHashMap<K, V> implements Map61B<K, V> {
+
+    @Override
+    public void put(K key, V value) {
+        if ( (double) size / cap >= factor) {
+            extend(cap * 2);
+        }
+
+        if (containsKey(key)) {
+            replacekey(key,value);
+        }
+        else {
+            size++;
+            buckets[Math.abs(key.hashCode() % cap)].add(new Node(key, value));
+        }
+    }
+    private void replacekey(K key, V value) {
+        Collection<Node> searching = buckets[Math.abs(key.hashCode() % cap)];
+        for (Node node : searching) {
+            if (node.key == key) {
+                node.value = value;
+            }
+        }
+    }
+
+    private void extend(int resize) {
+
+        cap = resize;
+        size = 0;
+        Collection<Node>[] buckets2 = buckets;
+        buckets = new Collection[resize];
+        for (int i = 0; i < resize; i++) {
+            buckets[i] = createBucket();
+        }
+        for (Collection<Node> bucket : buckets2) {
+            for (Node node : bucket) {
+                put(node.key, node.value);
+            }
+        }
+
+    }
+
+    @Override
+    public V get(K key) {
+        Collection<Node> searching = buckets[Math.abs(key.hashCode() % cap)];
+        for (Node node : searching) {
+            if (node.key.equals(key)) {
+                return node.value;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public boolean containsKey(K key) {
+        Collection<Node> searching = buckets[Math.abs(key.hashCode() % cap)];
+        for (Node node : searching) {
+            if (node.key.equals(key)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public int size() {
+        return size;
+    }
+
+    @Override
+    public void clear() {
+        size = 0;
+        for (int i = 0; i < cap; i++) {
+            buckets[i].clear();
+        }
+    }
+
+    @Override
+    public Set<K> keySet() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public V remove(K key) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Iterator<K> iterator() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * Protected helper class to store key/value pairs
@@ -28,10 +118,18 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
     private Collection<Node>[] buckets;
     // You should probably define some more!
 
-    /** Constructors */
-    public MyHashMap() { }
+    private int cap;
+    private final double factor;
+    private int size;
 
-    public MyHashMap(int initialCapacity) { }
+    /** Constructors */
+    public MyHashMap() {
+        this(16, 0.75);
+    }
+
+    public MyHashMap(int initialCapacity) {
+        this(initialCapacity, 0.75);
+    }
 
     /**
      * MyHashMap constructor that creates a backing array of initialCapacity.
@@ -40,7 +138,15 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      * @param initialCapacity initial size of backing array
      * @param loadFactor maximum load factor
      */
-    public MyHashMap(int initialCapacity, double loadFactor) { }
+    public MyHashMap(int initialCapacity, double loadFactor) {
+        factor = loadFactor;
+        cap = initialCapacity;
+        size = 0;
+        buckets = new Collection[initialCapacity];
+        for (int i = 0; i < initialCapacity; i++) {
+            buckets[i] = createBucket();
+        }
+    }
 
     /**
      * Returns a data structure to be a hash table bucket
@@ -61,7 +167,7 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      * OWN BUCKET DATA STRUCTURES WITH THE NEW OPERATOR!
      */
     protected Collection<Node> createBucket() {
-        return null;
+        return new ArrayList<>();
     }
 
     // TODO: Implement the methods of the Map61B Interface below
