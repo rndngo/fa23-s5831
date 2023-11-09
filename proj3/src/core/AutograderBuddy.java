@@ -3,6 +3,8 @@ package core;
 import tileengine.TETile;
 import tileengine.Tileset;
 
+import java.util.Arrays;
+
 public class AutograderBuddy {
 
     /**
@@ -19,8 +21,17 @@ public class AutograderBuddy {
      */
     public static TETile[][] getWorldFromInput(String input) {
 
-        throw new RuntimeException("Please fill out AutograderBuddy!");
+        String[] words = input.split("");
+        System.out.print(Arrays.toString(words));
 
+        StringBuilder numbers = new StringBuilder();
+        for (int i = 1; i < words.length; i++) {
+            numbers.append(words[i]);
+        }
+
+        // Need to implement this so we actually get rooms in it.
+        World world = new World(numbers.toString(),50,100, 12345);
+        return world.world;
     }
 
 
