@@ -7,6 +7,10 @@ import java.util.List;
 
 public class HyponymsHandler extends NgordnetQueryHandler {
 
+    private WordNet listofMaps;
+    public HyponymsHandler(WordNet map) {
+        listofMaps = map;
+    }
 
     @Override
     public String handle(NgordnetQuery q) {
@@ -14,7 +18,7 @@ public class HyponymsHandler extends NgordnetQueryHandler {
         int startYear = q.startYear();
         int endYear = q.endYear();
 
-        return "hello";
+        return "Hello!";
     }
 
 }
