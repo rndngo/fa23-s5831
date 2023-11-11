@@ -4,7 +4,8 @@ import tileengine.TERenderer;
 
 import java.util.Scanner;
 import javax.swing.JOptionPane;
-
+//princeton STDDraw ??
+//gui issues, only printing, no pop
 
 public class Main {
     private static final Scanner scanner = new Scanner(System.in);
@@ -20,23 +21,14 @@ public class Main {
 
             switch (choice) {
                 case 'N':
-                    System.out.println("Enter a seed for your world:");
+                    System.out.println("Enter seed for your world:");
                     long seed = Long.parseLong(scanner.nextLine());
-                    int width = 70;
+                    int width = 80;
                     int height = 40;
                     ter.initialize(width, height);
                     World world = new World("12345", width, height, seed);
                     ter.renderFrame(world.world);
                     break;
-                case 'L':
-                    System.out.println("Loading world is not implemented yet.");
-                    // Add your load world logic here
-                    break;
-                case 'Q':
-                    running = false;
-                    break;
-                default:
-                    System.out.println("Unknown command: " + choice);
             }
         }
 
@@ -47,8 +39,5 @@ public class Main {
     private static void displayMainMenu() {
         System.out.println("Main Menu:");
         System.out.println("N - Start a new world");
-        System.out.println("L - Load a world");
-        System.out.println("Q - Quit");
-        System.out.print("Please enter a command: ");
     }
 }

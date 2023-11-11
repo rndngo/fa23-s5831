@@ -25,12 +25,12 @@ public class AutograderBuddy {
         System.out.print(Arrays.toString(words));
 
         StringBuilder numbers = new StringBuilder();
-        for (int i = 1; i < words.length; i++) {
+        for (int i = 1; i < words.length-1; i++) {
             numbers.append(words[i]);
         }
 
         // Need to implement this so we actually get rooms in it.
-        World world = new World(numbers.toString(),50,100, 12345);
+        World world = new World(numbers.toString(),50,100, Integer.parseInt(numbers.toString()));
         return world.world;
     }
 
