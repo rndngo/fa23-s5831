@@ -1,3 +1,5 @@
+import org.knowm.xchart.internal.chartpart.AxisTickCalculator_;
+
 public class RedBlackTree<T extends Comparable<T>> {
 
     /* Root of the tree. */
@@ -63,6 +65,9 @@ public class RedBlackTree<T extends Comparable<T>> {
        and right children. */
     void flipColors(RBTreeNode<T> node) {
         // TODO: YOUR CODE HERE
+        node.isBlack = false;
+        node.left.isBlack = true;
+        node.right.isBlack = true;
     }
 
     /* Rotates the given node to the right. Returns the new root node of
@@ -70,7 +75,9 @@ public class RedBlackTree<T extends Comparable<T>> {
        of the new root and the old root!*/
     RBTreeNode<T> rotateRight(RBTreeNode<T> node) {
         // TODO: YOUR CODE HERE
-        return null;
+        RBTreeNode<T> newRight = new RBTreeNode<>(false, node.item, node.right.left, node.right);
+        RBTreeNode<T> newCenter = new RBTreeNode<>(true, node.left.item, node.left.left, newRight);
+        return newCenter;
     }
 
     /* Rotates the given node to the left. Returns the new root node of
@@ -78,7 +85,9 @@ public class RedBlackTree<T extends Comparable<T>> {
        of the new root and the old root! */
     RBTreeNode<T> rotateLeft(RBTreeNode<T> node) {
         // TODO: YOUR CODE HERE
-        return null;
+        RBTreeNode<T> newLeft = new RBTreeNode<>(false, node.item, node.left, node.right.left);
+        RBTreeNode<T> newCenter = new RBTreeNode<>(true, node.right.item, newLeft, node.right.right);
+        return newCenter;
     }
 
     public void insert(T item) {
@@ -108,12 +117,27 @@ public class RedBlackTree<T extends Comparable<T>> {
         // TODO: YOUR CODE HERE
 
         // Rotate left operation
+        if (node.right != null && isRed(node.right)) {
+
+            rotateLeft(node);
+
+        }
 
         // Rotate right operation
+        else if (node.left != null && node.left.left != null) {
+            if (isRed(node.left) && isRed(node.left.left)) {
+                rotateRight(node);
+            }
+        }
 
         // Color flip
+        else if (node.right != null && node.left != null) {
+            if (isRed(node.left) && isRed(node.right)) {
+                flipColors(node);
+            }
+        }
 
-        return null; //fix this return statement
+        return node; //fix this return statement
     }
 
     /* Returns whether the given node is red. Null nodes (children of leaf

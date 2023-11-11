@@ -39,8 +39,7 @@ public class GuitarString {
         double first = buffer.get(0);
         double second = buffer.get(1);
         buffer.removeFirst();
-        double offset = 0.996;
-        buffer.addLast(offset * 0.5 * (first + second));
+        buffer.addLast(DECAY * 0.5 * (first + second));
     }
 
     /* Return the double at the front of the buffer. */
