@@ -58,7 +58,9 @@ public class HyponymsHandler extends NgordnetQueryHandler {
             for (Double occurrenceCount : yearCounts) {
                 sum += occurrenceCount;
             }
-            mapping.put(word, sum);
+            if (sum > 0) {
+                mapping.put(word, sum);
+            }
         }
 
         // pick the top k based on count

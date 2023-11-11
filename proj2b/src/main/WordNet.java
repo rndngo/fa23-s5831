@@ -41,9 +41,7 @@ public class WordNet {
     public ArrayList<String> getHyponyms(String word, int k, double endYear, double startYear) {
         // returns an ordered list of the hyponyms of the word
         if (wordToNumbers.get(word) == null) {
-            ArrayList<String> single = new ArrayList<>();
-            single.add(word);
-            return single;
+            return new ArrayList<>();
         }
         // getting nodes
         ArrayList<Integer> nums = graph.getSubGraphNodes(wordToNumbers.get(word), k, endYear, startYear);

@@ -7,7 +7,7 @@ public class Main {
     public static void main(String[] args) {
         NgordnetServer hns = new NgordnetServer();
 
-        String wordFile = "./data/ngrams/top_49887_words.csv";
+        String wordFile = "./data/ngrams/top_14377_words.csv";
         String countFile = "./data/ngrams/total_counts.csv";
         String synsetsFile = "./data/wordnet/synsets.txt";
         String hyponymsFile = "./data/wordnet/hyponyms.txt";
