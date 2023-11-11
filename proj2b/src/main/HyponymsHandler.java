@@ -5,9 +5,7 @@ import browser.NgordnetQueryHandler;
 import ngrams.NGramMap;
 import ngrams.TimeSeries;
 
-import java.lang.reflect.Array;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class HyponymsHandler extends NgordnetQueryHandler {
 
@@ -65,19 +63,16 @@ public class HyponymsHandler extends NgordnetQueryHandler {
 
         // pick the top k based on count
         // Sort the 'mapping' entries by values in descending order
-        List<String> sortedWords = mapping.entrySet()
-                .stream()
-                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-                .map(Map.Entry::getKey)
-                .toList();
+        List<String> sW = mapping.entrySet().stream().
+                sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).map(Map.Entry::getKey).toList();
 
         // Create a new List to store the top k words
-         // Set your desired value for k
+        // Set your desired value for k
         List<String> topKWords = new ArrayList<>();
 
         // Iterate through the sorted words and add the top k words
-        for (int i = 0; i < k && i < sortedWords.size(); i++) {
-            topKWords.add(sortedWords.get(i));
+        for (int i = 0; i < k && i < sW.size(); i++) {
+            topKWords.add(sW.get(i));
         }
 
         topKWords.sort(null);

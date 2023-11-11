@@ -9,8 +9,8 @@ public class AutograderBuddy {
     public static NgordnetQueryHandler getHyponymHandler(
             String wordFile, String countFile,
             String synsetFile, String hyponymFile) {
-        WordNet wn = new WordNet(synsetFile,hyponymFile);
-        NGramMap ngm = new NGramMap(wordFile,countFile);
-        return new HyponymsHandler(wn,ngm);
+        WordNet wn = new WordNet(synsetFile, hyponymFile);
+        NGramMap ngm = new NGramMap(wordFile, countFile);
+        return new HyponymsHandler(wn, ngm);
     }
 }

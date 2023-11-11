@@ -8,11 +8,11 @@ import java.util.*;
 public class Graph {
     private HashMap<Integer, ArrayList<Integer>> graph = new HashMap<>();
 
-    public Graph(String DAGFilename) {
+    public Graph(String aDAGFilename) {
         // creating graph of form {int: int[], ...}
-        In DAGFile = new In(DAGFilename);
-        while (DAGFile.hasNextLine()) {
-            String numberline = DAGFile.readLine();
+        In aDAGFile = new In(aDAGFilename);
+        while (aDAGFile.hasNextLine()) {
+            String numberline = aDAGFile.readLine();
             String[] splitline = numberline.split(",");
             ArrayList<Integer> children = new ArrayList<>();
             // converting string list to integer list
@@ -39,15 +39,4 @@ public class Graph {
         }
         return answer;
     }
-
-    
-
-//    private String getHelper(String index) {
-//        if (graph.get(index) == null) {
-//            return index;
-//        }
-//
-//        return index + getHelper(graph.get(index));
-//    }
-
 }

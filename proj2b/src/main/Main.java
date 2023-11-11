@@ -3,9 +3,6 @@ package main;
 import browser.NgordnetServer;
 import ngrams.NGramMap;
 
-import java.util.ArrayList;
-
-
 public class Main {
     public static void main(String[] args) {
         NgordnetServer hns = new NgordnetServer();
@@ -16,11 +13,12 @@ public class Main {
         String hyponymsFile = "./data/wordnet/hyponyms.txt";
         NGramMap ngm = new NGramMap(wordFile, countFile);
 
-        WordNet wn = new WordNet(synsetsFile, hyponymsFile); // Need to connect the file that holds the data for this code
+        WordNet wn = new WordNet(synsetsFile, hyponymsFile);
+        // Need to connect the file that holds the data for this code
 
         hns.startUp();
-//        hns.register("history", new DummyHistoryHandler());
-//        hns.register("historytext", new DummyHistoryTextHandler());
+        hns.register("history", new DummyHistoryHandler());
+        hns.register("historytext", new DummyHistoryTextHandler());
         hns.register("hyponyms", new HyponymsHandler(wn, ngm));
 
         System.out.println("Finished server startup! Visit http://localhost:4567/ngordnet.html");
