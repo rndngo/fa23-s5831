@@ -1,31 +1,92 @@
 package main;
 
 import edu.princeton.cs.algs4.In;
-import org.apache.logging.log4j.util.SortedArrayStringMap;
+import ngrams.NGramMap;
+import ngrams.TimeSeries;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.*;
 
 public class WordNet {
     private Graph graph;
-    private HashMap<Integer, Node> wordstorage;
-    private HashMap<Integer, ArrayList<String>> connectionstorage;
+    private HashMap<Integer, ArrayList<String>> numberToWords;
+    private HashMap<String, ArrayList<Integer>> wordToNumbers;
 
-    private static class Node {
-        String key;
-        String value;
-
-        public Node(String key, String value) {
-            this.key = key;
-            this.value = value;
+    private static void addValue(HashMap<String, ArrayList<Integer>> multimap, String key, Integer value) {
+        ArrayList<Integer> values = multimap.get(key);
+        if (values == null) {
+            values = new ArrayList<>();
         }
+        values.add(value);
+        multimap.put(key, values);
+
     }
 
-    public WordNet(String file1, String file2) {
-        String hyponymsFile = "./data/wordnet/hyponyms16.txt";
-        graph = new Graph(hyponymsFile);
 
+    public WordNet(String synsetsFile, String hyponymsFile) {
+        // populate word storage
+        numberToWords = new HashMap<>();
+        wordToNumbers = new HashMap<>();
+        In syn = new In(synsetsFile);
+        while (syn.hasNextLine()) {
+            String wordline = syn.readLine();
+            String[] mapping = wordline.split(",");
+            // getting the words at this line
+            ArrayList<String> words = new ArrayList<>(Arrays.asList(mapping[1].split(" ")));
+            numberToWords.put(Integer.valueOf(mapping[0]), words);
+            for (String word : words) {
+                addValue(wordToNumbers, word, Integer.valueOf(mapping[0]));
+            }
+        }
+        graph = new Graph(hyponymsFile);
+    }
+
+    public ArrayList<String> getHyponyms(String word, int k, double endYear, double startYear) {
+        // returns an ordered list of the hyponyms of the word
+
+        // getting nodes
+        ArrayList<Integer> nums = graph.getSubGraphNodes(wordToNumbers.get(word), k, endYear, startYear);
+
+        // adding words to a set
+        HashSet<String> unorderedHyponyms = new HashSet<>();
+        for (Integer num : nums) {
+            unorderedHyponyms.addAll(numberToWords.get(num));
+        }
+
+        // convert set to array, order array
+        ArrayList<String> answer = new ArrayList<>(unorderedHyponyms);
+        // ordering array
+        answer.sort(null);
+        return answer;
+
+//
+//        HashMap<Double, String> greatest = new HashMap<>();
+//        ArrayList<String> answer = new ArrayList<>(unorderedHyponyms);
+//        if (k > 0) {
+//            ArrayList<Double> heighted = new ArrayList<>();
+//            for (String w : answer) {
+//                TimeSeries history = ngm.countHistory();
+//                Double totalData = 0.0;
+//                for (Double data : history.data()) {
+//                    totalData += data;
+//                    System.out.println(data);
+//
+//                }
+//                greatest.put(totalData, w);
+//                heighted.add(totalData);
+//            }
+//            heighted.sort(null);
+//            ArrayList<String> hAnswer = new ArrayList<>();
+//            System.out.println(heighted);
+//            System.out.println(greatest);
+//            for (int i = 0; i < k; i++) {
+//                hAnswer.add(greatest.get(heighted.get(i)));
+//            }
+//            hAnswer.sort(null);
+//            return hAnswer;
+//        } else {
+//            answer.sort(null);
+//        }
+//        return answer;
     }
 }
 //    public WordNet(String file1, String file2) {

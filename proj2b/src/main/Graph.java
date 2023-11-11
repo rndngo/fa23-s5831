@@ -26,7 +26,7 @@ public class Graph {
         }
     }
 
-    public ArrayList<Integer> getSubGraphNodes(ArrayList<Integer> nums) {
+    public ArrayList<Integer> getSubGraphNodes(ArrayList<Integer> nums, int k, double endYear, double startYear) {
         ArrayList<Integer> answer = new ArrayList<>();
         ArrayList<Integer> unexplored = new ArrayList<>(nums);
         while (!unexplored.isEmpty()) {
@@ -41,8 +41,7 @@ public class Graph {
     }
 
     
-    
-    //
+
 //    private String getHelper(String index) {
 //        if (graph.get(index) == null) {
 //            return index;

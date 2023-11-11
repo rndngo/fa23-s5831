@@ -19,7 +19,7 @@ public class PlotDemo {
 
         ArrayList<TimeSeries> lts = new ArrayList<>();
         for (String word : words) {
-            lts.add(ngm.weightHistory(word, 1900, 1950));
+            lts.add(ngm.weightHistory(word, 1950, 1900));
         }
 
         XYChart chart = Plotter.generateTimeSeriesChart(words, lts);
