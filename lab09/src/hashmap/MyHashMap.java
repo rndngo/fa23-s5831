@@ -12,10 +12,6 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
 
     @Override
     public void put(K key, V value) {
-        if ( (double) size / cap >= factor) {
-            extend(cap * 2);
-        }
-
         if (containsKey(key)) {
             replacekey(key,value);
         }
@@ -23,6 +19,10 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
             size++;
             buckets[Math.abs(key.hashCode() % cap)].add(new Node(key, value));
         }
+        if ( (double) size / cap >= factor) {
+            extend(cap * 2);
+        }
+
     }
     private void replacekey(K key, V value) {
         Collection<Node> searching = buckets[Math.abs(key.hashCode() % cap)];
