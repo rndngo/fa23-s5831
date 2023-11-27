@@ -1,9 +1,9 @@
 package core;
 
+import edu.princeton.cs.algs4.In;
 import tileengine.TETile;
 import tileengine.Tileset;
 
-import java.util.Arrays;
 
 public class AutograderBuddy {
 
@@ -19,20 +19,65 @@ public class AutograderBuddy {
      * @param input the input string to feed to your program
      * @return the 2D TETile[][] representing the state of the world
      */
+    private static final int W = 80;
+    private static final int H = 40;
     public static TETile[][] getWorldFromInput(String input) {
+        String[] letters = input.split("");
+        StringBuilder seedBuilder = new StringBuilder();
+        World world = null;
 
-        String[] words = input.split("");
-        System.out.print(Arrays.toString(words));
+        for (int i = 0; i < letters.length; i++) {
+            String command = letters[i].toLowerCase();
+            switch (command) {
+                case "n" -> {
+                    i++;
+                    while (i < letters.length && Character.isDigit(letters[i].charAt(0))) {
+                        seedBuilder.append(letters[i]);
+                        i++;
+                    }
 
-        StringBuilder numbers = new StringBuilder();
-        for (int i = 1; i < words.length-1; i++) {
-            numbers.append(words[i]);
+                    long seed = Long.parseLong(seedBuilder.toString());
+                    world = new World(W, H, seed);
+                }
+
+                case "w", "a", "s", "d" -> {
+                    if (world != null) {
+                        world.avatar.moveAvatar(command.charAt(0));
+                    }
+                }
+
+                case ":" -> {
+                    if (i + 1 < letters.length && letters[i + 1].equals("q")) {
+                        if (world != null) {
+                            LoadSave.save(seedBuilder + " " + world.avatar.avatarX + " " + world.avatar.avatarY
+                                    + " " + world.avatar.hasKey + " " + world.avatar.doorUnlocked);
+//                            world = null;
+                        }
+                    }
+                }
+
+                case "l" -> {
+                    String data = LoadSave.load();
+                    if (data == null) {
+                        return new World(W, H, 0).world;
+                    }
+
+                    String[] splitData = data.split(" ");
+                    World loaded = new World(W, H, Long.parseLong(splitData[0]));
+                    int Y = Integer.parseInt(splitData[2]);
+                    int X = Integer.parseInt(splitData[1]);
+                    boolean keyD = Boolean.parseBoolean(splitData[3]);
+                    boolean door = Boolean.parseBoolean(splitData[4]);
+                    loaded.avatar.loadAvatar(X, Y);
+                    loaded.loadWorld(keyD, door);
+                    world = loaded;
+                }
+            }
         }
 
-        // Need to implement this so we actually get rooms in it.
-        World world = new World(numbers.toString(),50,100, Integer.parseInt(numbers.toString()));
         return world.world;
     }
+
 
 
     /**

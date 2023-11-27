@@ -1,10 +1,10 @@
 package core;
 
 public class UnionFind {
-    private int[] parent;
-    private int[] rank;
+    private final int[] parent;
+    private final int[] rank;
     private int count;
-//iterate through list to find islands and connect them by closest
+    //iterate through list to find islands and connect them by closest
     public UnionFind(int size) {
         parent = new int[size];
         rank = new int[size];
@@ -24,7 +24,9 @@ public class UnionFind {
     public void union(int p, int q) {
         int rootP = find(p);
         int rootQ = find(q);
-        if (rootP == rootQ) return;
+        if (rootP == rootQ) {
+            return;
+        }
 
         // Make root of smaller rank point to root of larger rank
         if (rank[rootP] < rank[rootQ]) {
@@ -42,4 +44,3 @@ public class UnionFind {
         return count;
     }
 }
-
