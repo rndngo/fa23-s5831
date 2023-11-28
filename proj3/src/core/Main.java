@@ -38,7 +38,8 @@ public class Main {
         StdDraw.setFont(font);
         StdDraw.text(WIDTH / 2.0, HEIGHT / 2.0 + 6, "N - New World");
         StdDraw.text(WIDTH / 2.0, HEIGHT / 2.0 + 4, "L - Load World");
-        StdDraw.text(WIDTH / 2.0, HEIGHT / 2.0 + 2, "Q - Quit");
+        StdDraw.text(WIDTH / 2.0, HEIGHT / 2.0 + 2, "T - Toggle-ables");
+        StdDraw.text(WIDTH / 2.0, HEIGHT / 2.0, "Q - Quit");
 
         // Show the canvas
         StdDraw.show();
@@ -48,6 +49,7 @@ public class Main {
     // to reduce flickering!
     private static long seed;
     private static int torches = 5;
+    private static boolean wantsToggle = true;
     private static void interactWithInput() {
         while (true) {
             boolean needsRedraw = false;
@@ -96,7 +98,11 @@ public class Main {
                         }
                         break;
                     case 'g':
-                        if (torches > 0) {
+                        if (wantsToggle) {
+                            LOS = !LOS;
+                            needsRedraw = true;
+                            break;
+                        } else if (torches > 0) {
                             LOS = !LOS;
                             drawFrame();
                             StdDraw.pause(TEN * TEN * 5);
@@ -105,10 +111,14 @@ public class Main {
                             torches--;
                         }
                         break;
+                    case 't':
+                        if (world == null) {
+                            setWantsToggle();
+                        }
+                        break;
                     default:
                 }
             }
-
             if (needsRedraw && world != null) {
                 StdDraw.pause(TEN * TEN);
                 drawFrame();
@@ -125,6 +135,7 @@ public class Main {
         Font font = new Font("Arial", Font.BOLD, TEN * 3);
         StdDraw.setFont(font);
         StdDraw.text(WIDTH / 2.0, HEIGHT / 2.0 + TEN, "Q : Return to Main Menu");
+        StdDraw.text(WIDTH / 2.0, HEIGHT / 2.0 + 5, "S : View Settings");
         StdDraw.text(WIDTH / 2.0, HEIGHT / 2.0, "B : Return to Game");
         StdDraw.show();
 
@@ -144,8 +155,37 @@ public class Main {
                     font = new Font("Arial", Font.PLAIN, TEN + 6);
                     StdDraw.setFont(font);
                     break;
+                } else if (key == 's' || key == 'S') {
+                    setWantsToggle();
+                    break;
                 }
             }
+        }
+    }
+    private static void setWantsToggle() {
+        StdDraw.clear(StdDraw.BLACK);
+        StdDraw.setPenColor(StdDraw.WHITE);
+        Font font = new Font("Arial", Font.BOLD, TEN * 3);
+        StdDraw.setFont(font);
+        StdDraw.text(WIDTH / 2.0, HEIGHT / 2.0 + 2, "Do you want to turn on 'Toggle Lights'?");
+        StdDraw.text(WIDTH / 2.0, HEIGHT / 2.0 - 2, "Y : Yes        N : No");
+        StdDraw.show();
+        font = new Font("Arial", Font.PLAIN, TEN + TEN - 5);
+        StdDraw.setFont(font);
+        while (true) {
+            if (StdDraw.hasNextKeyTyped()) {
+                char key = StdDraw.nextKeyTyped();
+                if (key == 'Y' || key == 'y') {
+                    wantsToggle = true;
+                    break;
+                } else if (key == 'n' || key == 'N') {
+                    wantsToggle = false;
+                    break;
+                }
+            }
+        }
+        if (world == null) {
+            displayMainMenu();
         }
     }
 
@@ -327,11 +367,15 @@ public class Main {
                 // Display the avatar's name
                 StdDraw.setPenColor(Color.WHITE);
                 StdDraw.textRight(WIDTH - 1, HEIGHT - 3, "Name: " + world.getAvatar().getName());
+            }
+            if (torches > 0 && !wantsToggle) {
                 StdDraw.textRight(WIDTH - 1, HEIGHT - 5, "Torches Left: " + torches);
+                StdDraw.textRight(WIDTH - 1, HEIGHT - 7, "Press G to Use");
             }
             long elapsedTime = world.getElapsedTime();
             StdDraw.setPenColor(Color.WHITE);
             StdDraw.textRight(WIDTH - 1, HEIGHT - 1, "Time: " + elapsedTime + "s");
+            StdDraw.textLeft(1, 1, "'Shift' + ';' to Open Options");
             StdDraw.show();
 
 

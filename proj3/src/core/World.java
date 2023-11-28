@@ -41,24 +41,12 @@ public class World implements Serializable {
         createDoor();
         addWallsAroundFloors();
         createKey();
-        generateEncounter();
         avatar.placeAvatarInRandomRoom();
         world = avatar.getWorld();
         startTime = System.currentTimeMillis();
 
     }
-    private static final int TEN = 10;
-    private void generateEncounter() {
-        Random ran = new Random();
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                int chosen = ran.nextInt(TEN * TEN) + 1;
-                if (chosen <= (TEN) && world[x][y].equals(Tileset.FLOOR)) {
-                    world[x][y] = Tileset.ENCOUNTER;
-                }
-            }
-        }
-    }
+
 
     // Re Renders the door after being deleted xd
     public void reRenderDoor() {
@@ -77,8 +65,8 @@ public class World implements Serializable {
         int h = room.height();
 
         List<Cords> storage = new ArrayList<>();
-        for (int i = x + 1; i < w + x - 1; i++) {
-            for (int j = y + 1; j < h + y - 1; j++) {
+        for (int i = x + 1; i < w + x; i++) {
+            for (int j = y + 1; j < h + y; j++) {
                 storage.add(new Cords(i, j));
             }
         }
