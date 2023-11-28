@@ -1,11 +1,10 @@
 package tetris;
 
+import edu.princeton.cs.algs4.StdDraw;
 import tileengine.TETile;
 import tileengine.TERenderer;
 import tileengine.Tileset;
-
 import java.util.*;
-
 /**
  *  Provides the logic for Tetris.
  *
@@ -34,6 +33,8 @@ public class Tetris {
     private Tetromino currentTetromino;
 
     // The current game's score.
+
+
     private int score;
 
     /**
@@ -43,6 +44,8 @@ public class Tetris {
     private boolean isGameOver() {
         return isGameOver;
     }
+
+
 
     /**
      * Renders the game board and score to the screen.
@@ -66,11 +69,13 @@ public class Tetris {
         // The game ends if this tile is filled
         if (board[4][19] != Tileset.NOTHING) {
             isGameOver = true;
+            return;
         }
 
         // Otherwise, spawn a new piece and set its position to the spawn point
         currentTetromino = Tetromino.values()[bagRandom.getValue()];
         currentTetromino.reset();
+        System.out.println(currentTetromino);
     }
 
 
@@ -99,10 +104,31 @@ public class Tetris {
             Tetromino.draw(t, board, t.pos.x, t.pos.y);
             return;
         }
-
-        // TODO: Implement interactivity, so the user is able to input the keystrokes to move
-        //  the tile and rotate the tile. You'll want to use some provided helper methods here.
-
+        if (StdDraw.hasNextKeyTyped()) {
+                char key = Character.toLowerCase(StdDraw.nextKeyTyped());
+                switch (key) {
+                    case 'a':
+                        movement.tryMove(-1, 0);
+                        System.out.println('a');
+                        break;
+                    case 'd':
+                        movement.tryMove(1, 0);
+                        System.out.println('d');
+                        break;
+                    case 's':
+                        movement.dropDown();
+                        System.out.println('s');
+                        break;
+                    case 'w':
+                        movement.rotateRight();
+                        System.out.println('w');
+                        break;
+                    case 'q':
+                        movement.rotateLeft();
+                        System.out.println('q');
+                        break;
+                }
+        }
 
         Tetromino.draw(t, board, t.pos.x, t.pos.y);
     }
@@ -114,21 +140,55 @@ public class Tetris {
      */
     private void incrementScore(int linesCleared) {
         // TODO: Increment the score based on the number of lines cleared.
-
+        if (linesCleared == 1) {
+            score += 100;
+        } else if (linesCleared == 2) {
+            score += 300;
+        } else if (linesCleared == 3) {
+            score += 500;
+        } else if (linesCleared == 4) {
+            score += 800;
+        }
     }
 
     /**
      * Clears lines/rows on the board that are horizontally filled.
      * Repeats this process for cascading effects and updates score accordingly.
      */
+
     private void clearLines() {
-        // Keeps track of the current number lines cleared
         int linesCleared = 0;
+        for (int y = 0; y < GAME_HEIGHT; y++) {
 
-        // TODO: Check how many lines have been completed and clear it the rows if completed.
+            // checking if line is completed
+            boolean lineComplete = false;
+            int num_filled = 0;
+            for (int x = 0; x < WIDTH; x++) {
 
-        // TODO: Increment the score based on the number of lines cleared.
+                if (!board[x][y].equals(Tileset.NOTHING)) {
+                    num_filled += 1;
+                }
+                if (num_filled >= WIDTH) {
+                    lineComplete = true;
+                    break;
+                }
+            }
 
+
+            if (lineComplete) {
+                System.out.println("Y" + y);
+                linesCleared++;
+                System.out.println(linesCleared);
+                for (int clearY = y; clearY < GAME_HEIGHT - 1; clearY++) {
+                    for (int x = 0; x < WIDTH; x++) {
+                        board[x][clearY] = board[x][clearY + 1];
+
+                    }
+                }
+                y--; // Recheck the same row as it now contains the above row
+            }
+        }
+        incrementScore(linesCleared);
         fillAux();
         renderBoard();
     }
@@ -138,15 +198,30 @@ public class Tetris {
      * over.
      */
     public void runGame() {
-        resetActionTimer();
-        resetFrameTimer();
 
         // TODO: First spawn a piece
+        resetActionTimer();
+        resetFrameTimer();
+        spawnPiece(); // Initialize the first Tetromino
 
         // TODO: Set up your game loop. The game should keep running until the game is over.
         // Use helper methods inside your game loop, according to the spec description.
 
+        while (!isGameOver()) {
+            if (shouldRenderNewFrame()) {
+                if (currentTetromino == null) {
+                    clearLines();
+                    spawnPiece(); // Spawn a new piece if the current one is null and the game isn't over
+                    System.out.println("Spawned a new Piece. It's not the One Piece anymore.");
+                }
+                updateBoard();
 
+                renderBoard();
+
+
+
+            }
+        }
     }
 
     /**
@@ -154,8 +229,11 @@ public class Tetris {
      */
     private void renderScore() {
         // TODO: Use the StdDraw library to draw out the score.
-
+        StdDraw.setPenColor(StdDraw.WHITE);
+        StdDraw.textLeft(0, HEIGHT - 1, "Score: " + score);
+        StdDraw.show();
     }
+
 
     /**
      * Use this method to run Tetris.
@@ -164,6 +242,7 @@ public class Tetris {
     public static void main(String[] args) {
         long seed = args.length > 0 ? Long.parseLong(args[0]) : (new Random()).nextLong();
         Tetris tetris = new Tetris(seed);
+
         tetris.runGame();
     }
 
@@ -194,7 +273,6 @@ public class Tetris {
         bagRandom = new BagRandomizer(random, Tetromino.values().length);
         auxFilled = false;
         movement = new Movement(WIDTH, GAME_HEIGHT, this);
-
         ter.initialize(WIDTH, HEIGHT);
         fillBoard(Tileset.NOTHING);
         fillAux();
