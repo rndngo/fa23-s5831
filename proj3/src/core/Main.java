@@ -109,8 +109,6 @@ public class Main {
                 }
             }
 
-
-
             if (needsRedraw && world != null) {
                 StdDraw.pause(TEN * TEN);
                 drawFrame();
