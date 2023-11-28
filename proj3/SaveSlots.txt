@@ -1,1 +1,1 @@
-5 35 9 false false 4 d
+5 32 3 false false 5 Player 1

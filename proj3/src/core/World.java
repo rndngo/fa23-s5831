@@ -65,8 +65,8 @@ public class World implements Serializable {
         int h = room.height();
 
         List<Cords> storage = new ArrayList<>();
-        for (int i = x + 1; i < w + x; i++) {
-            for (int j = y + 1; j < h + y; j++) {
+        for (int i = x + 1; i < w + x - 1; i++) {
+            for (int j = y + 1; j < h + y - 1; j++) {
                 storage.add(new Cords(i, j));
             }
         }

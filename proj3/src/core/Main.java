@@ -75,11 +75,13 @@ public class Main {
                         }
                         break;
                     case 'l':
-                        String load = LoadSave.load();
-                        if (load == null) {
-                            break;
+                        if (world == null) {
+                            String load = LoadSave.load();
+                            if (load == null) {
+                                break;
+                            }
+                            renderLoadedWorld(load);
                         }
-                        renderLoadedWorld(load);
 
                         break;
                     case 'q':
