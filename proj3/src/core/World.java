@@ -14,13 +14,17 @@ public class World implements Serializable {
     int height;
     long worldID;
     TETile[][] world;
-    public Random random;
+    private final Random random;
     List<Rooms> roomsList;
     private final long startTime;
     private long elapsedTime;
-    public Avatar avatar;
-    public Cords doorCords;
-    public Cords keyCords;
+    private Avatar avatar;
+    public Avatar getAvatar() {
+        return avatar;
+    }
+    private Cords doorCords;
+    private Cords keyCords;
+
 
     public World(int width, int height, long seed) {
         this.height = height;
@@ -38,7 +42,7 @@ public class World implements Serializable {
         addWallsAroundFloors();
         createKey();
         avatar.placeAvatarInRandomRoom();
-        world = avatar.world;
+        world = avatar.getWorld();
         startTime = System.currentTimeMillis();
 
     }
@@ -46,7 +50,8 @@ public class World implements Serializable {
 
     // Re Renders the door after being deleted xd
     public void reRenderDoor() {
-        if (world[doorCords.x][doorCords.y].equals(Tileset.FLOOR) && !world[doorCords.x][doorCords.y].equals(avatar.avatar)) {
+        if (world[doorCords.x][doorCords.y].equals(Tileset.FLOOR)
+                && !world[doorCords.x][doorCords.y].equals(avatar.getAvatar())) {
             world[doorCords.x][doorCords.y] = Tileset.UNLOCKED_DOOR;
         }
     }
@@ -73,11 +78,11 @@ public class World implements Serializable {
 
     public void loadWorld(boolean keyD, boolean door) {
         if (keyD) {
-            avatar.hasKey = true;
+            avatar.obtainedKey();
             world[keyCords.x][keyCords.y] = Tileset.FLOOR;
         }
         if (door) {
-            avatar.doorUnlocked = true;
+            avatar.openDoor();
             world[doorCords.x][doorCords.y] = Tileset.UNLOCKED_DOOR;
         }
     }
@@ -90,9 +95,10 @@ public class World implements Serializable {
             this.y = y;
         }
     }
+    private final int TIMER = 1000;
     public void updateElapsedTime() {
         long currentTime = System.currentTimeMillis();
-        elapsedTime = (currentTime - startTime) / 1000; // Convert milliseconds to seconds
+        elapsedTime = (currentTime - startTime) / TIMER; // Convert milliseconds to seconds
     }
 
     public long getElapsedTime() {

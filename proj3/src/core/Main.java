@@ -3,26 +3,24 @@ package core;
 import edu.princeton.cs.algs4.StdDraw;
 import tileengine.TERenderer;
 import tileengine.TETile;
+import tileengine.Tileset;
 
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 
 
 public class Main {
     private static final int WIDTH = 80;
     private static final int HEIGHT = 40;
     private static final TERenderer TER = new TERenderer();
-    public static World world;
+    private static World world;
     private static boolean LOS = true; // Default is off
 
     public static void main(String[] args) {
         TER.initialize(WIDTH, HEIGHT);
         displayMainMenu();
-        interactWithInputString();
+        interactWithInput();
     }
+    private static final int TEN = 10;
 
     private static void displayMainMenu() {
         // Clear the screen and set up the drawing canvas
@@ -30,12 +28,12 @@ public class Main {
         StdDraw.setPenColor(StdDraw.WHITE);
 
         // Set larger font for the title
-        Font font = new Font("Arial", Font.BOLD, 30);
+        Font font = new Font("Arial", Font.BOLD, TEN * 3);
         StdDraw.setFont(font);
-        StdDraw.text(WIDTH / 2.0, HEIGHT / 2.0 + 10, "CS61B Menu");
+        StdDraw.text(WIDTH / 2.0, HEIGHT / 2.0 + TEN, "CS61B Menu");
 
         // Set smaller font for the menu options
-        font = new Font("Arial", Font.PLAIN, 16);
+        font = new Font("Arial", Font.PLAIN, TEN + 6);
         StdDraw.setFont(font);
         StdDraw.text(WIDTH / 2.0, HEIGHT / 2.0 + 6, "N - New World");
         StdDraw.text(WIDTH / 2.0, HEIGHT / 2.0 + 4, "L - Load World");
@@ -48,7 +46,7 @@ public class Main {
     //double buffer method, draw to off-site buffer then copy in one
     // to reduce flickering!
     private static long seed;
-    private static void interactWithInputString() {
+    private static void interactWithInput() {
         while (true) {
             boolean needsRedraw = false;
 
@@ -68,25 +66,31 @@ public class Main {
                                 break;
                             }
                             world = new World(WIDTH, HEIGHT, seed);
+                            promptForAvatarName();
                             needsRedraw = true;
                         }
                         break;
                     case 'l':
-                        long loadSeed = promptForSeed();
-                        if (loadSeed < 0) {
-                            displayMainMenu();
+                        String load = LoadSave.load();
+                        if (load == null) {
                             break;
                         }
-                        load(loadSeed);
-
-                        if (world != null) {
-                            needsRedraw = true;
-                        }
+                        String[] loading = load.split(" ");
+                        long savedSeed = Long.parseLong(loading[0]);
+                        world = new World(WIDTH, HEIGHT, savedSeed);
+                        seed = savedSeed;
+                        int Y = Integer.parseInt(loading[2]);
+                        int X = Integer.parseInt(loading[1]);
+                        boolean keyD = Boolean.parseBoolean(loading[3]);
+                        boolean door = Boolean.parseBoolean(loading[4]);
+                        world.getAvatar().loadAvatar(X, Y);
+                        world.loadWorld(keyD, door);
                         break;
                     case 'q':
                         if (world != null) {
-                            LoadSave.save(seed + " " + world.avatar.avatarX + " " + world.avatar.avatarY
-                                    + " " + world.avatar.hasKey + " " + world.avatar.doorUnlocked);
+                            LoadSave.save(seed + " " + world.getAvatar().getAvatarX()
+                                    + " " + world.getAvatar().getAvatarY()
+                                    + " " + world.getAvatar().isHasKey() + " " + world.getAvatar().isDoorUnlocked());
                         }
                         System.exit(0);
                         break;
@@ -95,7 +99,7 @@ public class Main {
                     case 's':
                     case 'd':
                         if (world != null) {
-                            world.avatar.moveAvatar(key);
+                            world.getAvatar().moveAvatar(key);
                             world.reRenderDoor();
                             needsRedraw = true;
                         }
@@ -104,45 +108,14 @@ public class Main {
                         LOS = !LOS;
                         needsRedraw = true;
                         break;
-                    case 'o':
-                        promptForAvatarName();
-                        break;
+                    default:
                 }
             }
 
             if (needsRedraw && world != null) {
-                StdDraw.pause(100);
+                StdDraw.pause(TEN * TEN);
                 drawFrame();
             }
-        }
-    }
-    public static void load(long loadSeed) {
-        File file = new File("./src/core/SaveSlots.txt");
-        if (!file.exists()) {
-            displayMainMenu();
-            return;
-        }
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] loading = line.split(" ");
-                long savedSeed = Long.parseLong(loading[0]);
-                if (savedSeed == loadSeed) {
-                    world = new World(WIDTH, HEIGHT, loadSeed);
-                    seed = loadSeed;
-                    int Y = Integer.parseInt(loading[2]);
-                    int X = Integer.parseInt(loading[1]);
-                    boolean keyD = Boolean.parseBoolean(loading[3]);
-                    boolean door = Boolean.parseBoolean(loading[4]);
-                    world.avatar.loadAvatar(X, Y);
-                    world.loadWorld(keyD, door);
-                    break;
-                }
-            }
-        } catch (IOException e) {
-            System.err.println("Error reading save file: " + e.getMessage());
-            displayMainMenu();
         }
     }
 
@@ -151,53 +124,69 @@ public class Main {
         StdDraw.setPenColor(StdDraw.WHITE);
         StdDraw.text(WIDTH / 2.0, HEIGHT / 2.0 + 2, "Enter Avatar Name:");
         StdDraw.text(WIDTH / 2.0, HEIGHT / 2.0 - 2, "Press S to Continue");
+        StdDraw.text(WIDTH / 2.0, HEIGHT / 2.0 - 4, "Press ` to Go Back");
         StdDraw.show();
 
         StringBuilder name = new StringBuilder();
+        boolean back = false;
         while (true) {
             if (StdDraw.hasNextKeyTyped()) {
                 char key = StdDraw.nextKeyTyped();
                 if (key == 'S' || key == 's') {
                     break;
+                } else if (key == '`' || key == '~') {
+                    back = true;
+                    break;
                 } else {
                     name.append(key);
                 }
+                StdDraw.clear(StdDraw.BLACK);
+                StdDraw.setPenColor(StdDraw.WHITE);
+                StdDraw.text(WIDTH / 2.0, HEIGHT / 2.0 + 2, "Enter Avatar Name:");
+                StdDraw.text(WIDTH / 2.0, HEIGHT / 2.0 - 2, "Press S to Continue");
+                StdDraw.text(WIDTH / 2.0, HEIGHT / 2.0 - 4, "Press ` to Go Back");
+                StdDraw.text(WIDTH / 2.0, HEIGHT / 2.0, name.toString());
+                StdDraw.show();
             }
             // Update the displayed name
-            StdDraw.text(WIDTH / 2.0, HEIGHT / 2.0, name.toString());
-            StdDraw.show();
+
         }
-        if (world != null) {
-            world.avatar.setName(name.toString());
+        if (back) {
+            seed = promptForSeed();
+            world = new World(WIDTH, HEIGHT, seed);
+            promptForAvatarName();
+        }
+        if (world != null && !name.isEmpty()) {
+            world.getAvatar().setName(name.toString());
         }
     }
 
     private static long promptForSeed() {
-        StringBuilder seed = new StringBuilder();
+        StringBuilder seeder = new StringBuilder();
 
         while (true) {
-            clearAndDisplaySeedPrompt(seed);
+            clearAndDisplaySeedPrompt(seeder);
 
             if (StdDraw.hasNextKeyTyped()) {
                 char key = StdDraw.nextKeyTyped();
                 if (key == 'S' || key == 's') {
                     try {
-                        return Long.parseLong(seed.toString());
+                        return Long.parseLong(seeder.toString());
                     } catch (NumberFormatException e) {
                         // Handle invalid seed input (like an empty string)
-                        seed = new StringBuilder(); // Reset the seed input
+                        seeder = new StringBuilder(); // Reset the seed input
                         continue;
                     }
                 } else if (key == 'b' || key == 'B') {
                     return -1;
                 } else if (Character.isDigit(key)) {
-                    seed.append(key);
+                    seeder.append(key);
                 }
             }
         }
     }
 
-    private static void clearAndDisplaySeedPrompt(StringBuilder seed) {
+    private static void clearAndDisplaySeedPrompt(StringBuilder seeds) {
         StdDraw.clear(StdDraw.BLACK);
         StdDraw.setPenColor(StdDraw.WHITE);
 
@@ -207,13 +196,30 @@ public class Main {
         StdDraw.text(WIDTH / 2.0, HEIGHT / 2.0 - 4, "Press B to Go Back");
 
         // Display the current seed
-        StdDraw.text(WIDTH / 2.0, HEIGHT / 2.0, seed.toString());
+        StdDraw.text(WIDTH / 2.0, HEIGHT / 2.0, seeds.toString());
 
         StdDraw.show();
     }
     private static void drawFrame() {
         StdDraw.clear();
-        TER.renderFrame(world.world);
+        if (LOS && world != null) {
+            boolean[][] inSight = world.getAvatar().lOS(5); // Radius of 5, for example
+            TETile[][] tilesToRender = new TETile[WIDTH][HEIGHT];
+            for (int x = 0; x < WIDTH; x++) {
+                for (int y = 0; y < HEIGHT; y++) {
+                    if (inSight[x][y]) {
+                        tilesToRender[x][y] = world.world[x][y];
+                    } else {
+                        tilesToRender[x][y] = Tileset.NOTHING; // Or some other default tile
+                    }
+                }
+            }
+            StdDraw.clear(Color.BLACK);
+            TER.drawTiles(tilesToRender);
+        } else {
+            StdDraw.clear(Color.BLACK);
+            TER.drawTiles(world.world);
+        }
         drawHUD();
         StdDraw.show();
     }
@@ -228,14 +234,21 @@ public class Main {
                 StdDraw.setPenColor(Color.WHITE);
                 StdDraw.textLeft(1, HEIGHT - 1, "Current Tile: " + description);
             }
-            if (world.avatar.hasKey) {
+            if (world.getAvatar().isHasKey()) {
                 StdDraw.setPenColor(Color.WHITE);
-                StdDraw.textLeft(  1, HEIGHT - 3, "Key Obtained");
+                StdDraw.textLeft(1, HEIGHT - 3, "Key Obtained");
             }
             long elapsedTime = world.getElapsedTime();
             StdDraw.setPenColor(Color.WHITE);
             StdDraw.textRight(WIDTH - 1, HEIGHT - 1, "Time: " + elapsedTime + "s");
             StdDraw.show();
+
+            if (world != null) {
+                // Display the avatar's name
+                StdDraw.setPenColor(Color.WHITE);
+                StdDraw.textRight(WIDTH - 1, HEIGHT - 3, "Name: " + world.getAvatar().getName());
+                StdDraw.show();
+            }
         }
     }
 }

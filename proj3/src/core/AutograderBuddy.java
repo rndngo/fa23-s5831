@@ -1,6 +1,5 @@
 package core;
 
-import edu.princeton.cs.algs4.In;
 import tileengine.TETile;
 import tileengine.Tileset;
 
@@ -25,15 +24,16 @@ public class AutograderBuddy {
         String[] letters = input.split("");
         StringBuilder seedBuilder = new StringBuilder();
         World world = null;
+        int i = 0;
 
-        for (int i = 0; i < letters.length; i++) {
+        for (; i < letters.length; i++) {
             String command = letters[i].toLowerCase();
             switch (command) {
                 case "n" -> {
-                    i++;
+                    i += 1;
                     while (i < letters.length && Character.isDigit(letters[i].charAt(0))) {
                         seedBuilder.append(letters[i]);
-                        i++;
+                        i += 1;
                     }
 
                     long seed = Long.parseLong(seedBuilder.toString());
@@ -42,16 +42,16 @@ public class AutograderBuddy {
 
                 case "w", "a", "s", "d" -> {
                     if (world != null) {
-                        world.avatar.moveAvatar(command.charAt(0));
+                        world.getAvatar().moveAvatar(command.charAt(0));
                     }
                 }
 
                 case ":" -> {
                     if (i + 1 < letters.length && letters[i + 1].equals("q")) {
                         if (world != null) {
-                            LoadSave.save(seedBuilder + " " + world.avatar.avatarX + " " + world.avatar.avatarY
-                                    + " " + world.avatar.hasKey + " " + world.avatar.doorUnlocked);
-//                            world = null;
+                            LoadSave.save(seedBuilder + " " + world.getAvatar().getAvatarX()
+                                    + " " + world.getAvatar().getAvatarY()
+                                    + " " + world.getAvatar().isHasKey() + " " + world.getAvatar().isDoorUnlocked());
                         }
                     }
                 }
@@ -59,7 +59,7 @@ public class AutograderBuddy {
                 case "l" -> {
                     String data = LoadSave.load();
                     if (data == null) {
-                        return new World(W, H, 0).world;
+                        return new World(W, H, 1).world;
                     }
 
                     String[] splitData = data.split(" ");
@@ -68,9 +68,12 @@ public class AutograderBuddy {
                     int X = Integer.parseInt(splitData[1]);
                     boolean keyD = Boolean.parseBoolean(splitData[3]);
                     boolean door = Boolean.parseBoolean(splitData[4]);
-                    loaded.avatar.loadAvatar(X, Y);
+                    loaded.getAvatar().loadAvatar(X, Y);
                     loaded.loadWorld(keyD, door);
                     world = loaded;
+                }
+                default -> {
+
                 }
             }
         }

@@ -32,27 +32,20 @@ public class WorldGenTests {
     public void basicSaveTest() {
         // TODO: write a test that calls getWorldFromInput twice, with "n123swasd:q" and with "lwasd"
 
-        TETile[][] tiles = AutograderBuddy.getWorldFromInput("n1392967723524655428sddsaawws:q");
 
-
-        TETile[][] tiles3 = AutograderBuddy.getWorldFromInput("n1392967723524655428sddsaawwsaddw");
-
-        TERenderer ter = new TERenderer();
-
-        ter.initialize(tiles.length, tiles[0].length);
-        ter.renderFrame(tiles3);
+        TETile[][] tiles1 = AutograderBuddy.getWorldFromInput("n1392967723524655428sddsaawwsaddw");
+        TERenderer ter1 = new TERenderer();
+        ter1.initialize(tiles1.length, tiles1[0].length);
+        ter1.renderFrame(tiles1);
         StdDraw.pause(5000);
 
-        ter = new TERenderer();
-        ter.initialize(tiles.length, tiles[0].length);
-        // ter.renderFrame(tiles);
-//        StdDraw.pause(5000);
 
-        TETile[][] tiles2 = AutograderBuddy.getWorldFromInput("laddw");
-
-        ter = new TERenderer();
-        ter.initialize(tiles2.length, tiles2[0].length);
-        ter.renderFrame(tiles2);
+        AutograderBuddy.getWorldFromInput("n1392967723524655428sddsaawws:q");
+        TETile[][] tiles2;
+        tiles2 = AutograderBuddy.getWorldFromInput("laddw");
+        TERenderer ter2 = new TERenderer();
+        ter2.initialize(tiles2.length, tiles2[0].length);
+        ter2.renderFrame(tiles2);
         StdDraw.pause(5000);
 
 

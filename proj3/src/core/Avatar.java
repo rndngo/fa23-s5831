@@ -9,12 +9,31 @@ import java.util.Random;
 public class Avatar {
     private final int width;
     private final int height;
-    public final TETile[][] world;
+    private final TETile[][] world;
+
+    public TETile[][] getWorld() {
+        return world;
+    }
     private final List<Rooms> roomsList;
     private final Random random;
-    public TETile avatar;
-    public boolean doorUnlocked;
-    public int avatarX, avatarY;  // Coordinates of the avatar
+    private TETile avatar;
+    public TETile getAvatar() {
+        return avatar;
+    }
+    private boolean doorUnlocked;
+    public boolean isDoorUnlocked() {
+        return doorUnlocked;
+    }
+    public void openDoor() {
+        doorUnlocked = true;
+    }
+    private int avatarX, avatarY;  // Coordinates of the avatar
+    public int getAvatarX() {
+        return avatarX;
+    }
+    public int getAvatarY() {
+        return avatarY;
+    }
     private String name;
 
     public Avatar(int width, int height, TETile[][] world, List<Rooms> roomsList, Random random) {
@@ -43,7 +62,13 @@ public class Avatar {
         world[avatarX][avatarY] = avatar;
     }
 
-    public boolean hasKey;
+    private boolean hasKey;
+    public boolean isHasKey() {
+        return hasKey;
+    }
+    public void obtainedKey() {
+        hasKey = true;
+    }
     public void moveAvatar(char direction) {
 
         int newX = avatarX, newY = avatarY;
@@ -57,12 +82,14 @@ public class Avatar {
             // Move down
             case 'd' -> newX++;
             // Move right
+            default -> {
+            }
         }
 
 
         // Check for walls or out of bounds
-        if (newX < 0 || newX >= width || newY < 0 || newY >= height ||
-            world[newX][newY].equals(Tileset.WALL) || world[newX][newY].equals(Tileset.NOTHING)
+        if (newX < 0 || newX >= width || newY < 0 || newY >= height
+                || world[newX][newY].equals(Tileset.WALL) || world[newX][newY].equals(Tileset.NOTHING)
                 || (!hasKey && world[newX][newY].equals(Tileset.LOCKED_DOOR))) {
             return;  // Don't move if it's not a valid move
 
@@ -99,7 +126,7 @@ public class Avatar {
             }
         }
     }
-    public boolean[][] calculateLineOfSight(int radius) {
+    public boolean[][] lOS(int radius) {
         boolean[][] inSight = new boolean[width][height];
         for (int x = -radius; x <= radius; x++) {
             for (int y = -radius; y <= radius; y++) {

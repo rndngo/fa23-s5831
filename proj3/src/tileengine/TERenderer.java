@@ -98,4 +98,11 @@ public class TERenderer {
         }
         StdDraw.show();
     }
+    public void drawTiles(TETile[][] world) {
+        for (int x = 0; x < world.length; x += 1) {
+            for (int y = 0; y < world[x].length; y += 1) {
+                world[x][y].draw(x + xOffset, y + yOffset);
+            }
+        }
+    }
 }
