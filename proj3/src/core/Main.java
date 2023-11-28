@@ -46,6 +46,7 @@ public class Main {
     //double buffer method, draw to off-site buffer then copy in one
     // to reduce flickering!
     private static long seed;
+    private static int torches = 5;
     private static void interactWithInput() {
         while (true) {
             boolean needsRedraw = false;
@@ -75,29 +76,20 @@ public class Main {
                         if (load == null) {
                             break;
                         }
-                        String[] loading = load.split(" ");
-                        long savedSeed = Long.parseLong(loading[0]);
-                        world = new World(WIDTH, HEIGHT, savedSeed);
-                        seed = savedSeed;
-                        int Y = Integer.parseInt(loading[2]);
-                        int X = Integer.parseInt(loading[1]);
-                        boolean keyD = Boolean.parseBoolean(loading[3]);
-                        boolean door = Boolean.parseBoolean(loading[4]);
-                        world.getAvatar().loadAvatar(X, Y);
-                        world.loadWorld(keyD, door);
+                        renderLoadedWorld(load);
+
                         break;
                     case 'q':
                         if (world != null) {
-                            LoadSave.save(seed + " " + world.getAvatar().getAvatarX()
+                            StringBuilder string = new StringBuilder();
+                            string.append(seed + " " + world.getAvatar().getAvatarX()
                                     + " " + world.getAvatar().getAvatarY()
                                     + " " + world.getAvatar().isHasKey() + " " + world.getAvatar().isDoorUnlocked());
+                            LoadSave.save(string + " " + torches);
                         }
                         System.exit(0);
                         break;
-                    case 'w':
-                    case 'a':
-                    case 's':
-                    case 'd':
+                    case 'w': case 'a': case 's': case 'd':
                         if (world != null) {
                             world.getAvatar().moveAvatar(key);
                             world.reRenderDoor();
@@ -105,18 +97,68 @@ public class Main {
                         }
                         break;
                     case 'g':
-                        LOS = !LOS;
-                        needsRedraw = true;
+                        if (torches > 0) {
+                            LOS = !LOS;
+                            drawFrame();
+                            StdDraw.pause(TEN * TEN * 5);
+                            LOS = !LOS;
+                            drawFrame();
+                            torches--;
+                        }
                         break;
                     default:
                 }
             }
 
+
+
             if (needsRedraw && world != null) {
                 StdDraw.pause(TEN * TEN);
                 drawFrame();
             }
+            if (world != null && world.getAvatar().isDoorUnlocked()) {
+                displayGameOver();
+            }
         }
+    }
+
+    private static void renderLoadedWorld(String loaded) {
+        String[] loading = loaded.split(" ");
+        long savedSeed = Long.parseLong(loading[0]);
+        world = new World(WIDTH, HEIGHT, savedSeed);
+        seed = savedSeed;
+        int Y = Integer.parseInt(loading[2]);
+        int X = Integer.parseInt(loading[1]);
+        boolean keyD = Boolean.parseBoolean(loading[3]);
+        boolean door = Boolean.parseBoolean(loading[4]);
+        world.getAvatar().loadAvatar(X, Y);
+        world.loadWorld(keyD, door);
+        torches = Integer.parseInt(loading[5]);
+    }
+
+    private static void resetGame() {
+        world = null;
+        LoadSave.save("");
+    }
+
+    private static void displayGameOver() {
+        StdDraw.clear(StdDraw.BLACK);
+        StdDraw.setPenColor(StdDraw.WHITE);
+        Font font = new Font("Arial", Font.BOLD, TEN * 3);
+        StdDraw.setFont(font);
+        StdDraw.text(WIDTH / 2.0, HEIGHT / 2.0 + TEN, "Congrats on Completing the Game");
+        StdDraw.show();
+        StdDraw.pause(TEN * TEN * TEN * 5);
+        font = new Font("Arial", Font.PLAIN, TEN + TEN - 5);
+        StdDraw.setFont(font);
+        StdDraw.text(WIDTH / 2.0, HEIGHT / 2.0 + 6, "You will be directed to the Main Menu shortly");
+        resetGame();
+        StdDraw.show();
+        StdDraw.pause(TEN * TEN * TEN * 5);
+
+        // Show the canvas
+        StdDraw.show();
+        displayMainMenu();
     }
 
     private static void promptForAvatarName() {
@@ -238,17 +280,18 @@ public class Main {
                 StdDraw.setPenColor(Color.WHITE);
                 StdDraw.textLeft(1, HEIGHT - 3, "Key Obtained");
             }
+            if (world != null) {
+                // Display the avatar's name
+                StdDraw.setPenColor(Color.WHITE);
+                StdDraw.textRight(WIDTH - 1, HEIGHT - 3, "Name: " + world.getAvatar().getName());
+                StdDraw.textRight(WIDTH - 1, HEIGHT - 5, "Torches Left: " + torches);
+            }
             long elapsedTime = world.getElapsedTime();
             StdDraw.setPenColor(Color.WHITE);
             StdDraw.textRight(WIDTH - 1, HEIGHT - 1, "Time: " + elapsedTime + "s");
             StdDraw.show();
 
-            if (world != null) {
-                // Display the avatar's name
-                StdDraw.setPenColor(Color.WHITE);
-                StdDraw.textRight(WIDTH - 1, HEIGHT - 3, "Name: " + world.getAvatar().getName());
-                StdDraw.show();
-            }
+
         }
     }
 }
