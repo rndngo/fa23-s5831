@@ -81,14 +81,12 @@ public class Main {
 
                         break;
                     case 'q':
-                        if (world != null) {
-                            StringBuilder string = new StringBuilder();
-                            string.append(seed + " " + world.getAvatar().getAvatarX()
-                                    + " " + world.getAvatar().getAvatarY()
-                                    + " " + world.getAvatar().isHasKey() + " " + world.getAvatar().isDoorUnlocked());
-                            LoadSave.save(string + " " + torches);
+                        if (world == null) {
+                            System.exit(0);
                         }
-                        System.exit(0);
+                        break;
+                    case ':':
+                        promptQuit();
                         break;
                     case 'w': case 'a': case 's': case 'd':
                         if (world != null) {
@@ -123,6 +121,36 @@ public class Main {
         }
     }
 
+    private static void promptQuit() {
+        StdDraw.clear(StdDraw.BLACK);
+        StdDraw.setPenColor(StdDraw.WHITE);
+        Font font = new Font("Arial", Font.BOLD, TEN * 3);
+        StdDraw.setFont(font);
+        StdDraw.text(WIDTH / 2.0, HEIGHT / 2.0 + TEN, "Q : Return to Main Menu");
+        StdDraw.text(WIDTH / 2.0, HEIGHT / 2.0, "B : Return to Game");
+        StdDraw.show();
+
+        while (true) {
+            if (StdDraw.hasNextKeyTyped()) {
+                char key = StdDraw.nextKeyTyped();
+                if (key == 'q' || key == 'Q') {
+                    StringBuilder string = new StringBuilder();
+                    string.append(seed + " " + world.getAvatar().getAvatarX()
+                            + " " + world.getAvatar().getAvatarY()
+                            + " " + world.getAvatar().isHasKey() + " " + world.getAvatar().isDoorUnlocked());
+                    LoadSave.save(string + " " + torches + " " + world.getAvatar().getName());
+                    resetGame();
+                    displayMainMenu();
+                    break;
+                } else if (key == 'b' || key == 'B') {
+                    font = new Font("Arial", Font.PLAIN, TEN + 6);
+                    StdDraw.setFont(font);
+                    break;
+                }
+            }
+        }
+    }
+
     private static void renderLoadedWorld(String loaded) {
         String[] loading = loaded.split(" ");
         long savedSeed = Long.parseLong(loading[0]);
@@ -135,11 +163,12 @@ public class Main {
         world.getAvatar().loadAvatar(X, Y);
         world.loadWorld(keyD, door);
         torches = Integer.parseInt(loading[5]);
+        world.getAvatar().setName(loading[6]);
     }
 
     private static void resetGame() {
         world = null;
-        LoadSave.save("");
+        torches = 5;
     }
 
     private static void displayGameOver() {
@@ -154,11 +183,11 @@ public class Main {
         StdDraw.setFont(font);
         StdDraw.text(WIDTH / 2.0, HEIGHT / 2.0 + 6, "You will be directed to the Main Menu shortly");
         resetGame();
+        LoadSave.save("");
         StdDraw.show();
         StdDraw.pause(TEN * TEN * TEN * 5);
 
         // Show the canvas
-        StdDraw.show();
         displayMainMenu();
     }
 
@@ -251,7 +280,7 @@ public class Main {
             this.y = y;
         }
     }
-    private static ArrayList<Cords> cordsList ;
+    private static ArrayList<Cords> cordsList;
     private static void drawFrame() {
         StdDraw.clear();
         cordsList = new ArrayList<>();
@@ -262,7 +291,7 @@ public class Main {
                 for (int y = 0; y < HEIGHT; y++) {
                     if (inSight[x][y]) {
                         tilesToRender[x][y] = world.world[x][y];
-                        cordsList.add(new Cords(x,y));
+                        cordsList.add(new Cords(x, y));
                     } else {
                         tilesToRender[x][y] = Tileset.NOTHING; // Or some other default tile
                     }

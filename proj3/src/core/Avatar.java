@@ -69,6 +69,7 @@ public class Avatar {
     public void obtainedKey() {
         hasKey = true;
     }
+
     public void moveAvatar(char direction) {
 
         int newX = avatarX, newY = avatarY;
