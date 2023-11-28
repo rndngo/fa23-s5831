@@ -6,6 +6,7 @@ import tileengine.TETile;
 import tileengine.Tileset;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 
 public class Main {
@@ -242,8 +243,18 @@ public class Main {
 
         StdDraw.show();
     }
+    private static class Cords {
+        int x;
+        int y;
+        public Cords(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
+    private static ArrayList<Cords> cordsList ;
     private static void drawFrame() {
         StdDraw.clear();
+        cordsList = new ArrayList<>();
         if (LOS && world != null) {
             boolean[][] inSight = world.getAvatar().lOS(5); // Radius of 5, for example
             TETile[][] tilesToRender = new TETile[WIDTH][HEIGHT];
@@ -251,6 +262,7 @@ public class Main {
                 for (int y = 0; y < HEIGHT; y++) {
                     if (inSight[x][y]) {
                         tilesToRender[x][y] = world.world[x][y];
+                        cordsList.add(new Cords(x,y));
                     } else {
                         tilesToRender[x][y] = Tileset.NOTHING; // Or some other default tile
                     }
@@ -271,10 +283,14 @@ public class Main {
             int mouseY = (int) StdDraw.mouseY();
 
             if (mouseX >= 0 && mouseX < WIDTH && mouseY >= 0 && mouseY < HEIGHT) {
-                TETile tile = world.world[mouseX][mouseY];
-                String description = (tile == null) ? "None" : tile.description();
-                StdDraw.setPenColor(Color.WHITE);
-                StdDraw.textLeft(1, HEIGHT - 1, "Current Tile: " + description);
+                for (Cords cords : cordsList) {
+                    if (cords.x == mouseX && cords.y == mouseY) {
+                        TETile tile = world.world[mouseX][mouseY];
+                        String description = (tile == null) ? "None" : tile.description();
+                        StdDraw.setPenColor(Color.WHITE);
+                        StdDraw.textLeft(1, HEIGHT - 1, "Current Tile: " + description);
+                    }
+                }
             }
             if (world.getAvatar().isHasKey()) {
                 StdDraw.setPenColor(Color.WHITE);
